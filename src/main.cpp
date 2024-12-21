@@ -1,24 +1,23 @@
-#include <cstdlib>
 #include <iostream>
-#include <ostream>
 #include <thread>
-#include <chrono>
+#include "../includes/Core/Time.h"
+#include "../includes/Core/Game.h"
 
-
-void waitTime(int seconds){
-	auto now = std::chrono::steady_clock::now();
-	std::this_thread::sleep_until(now + std::chrono::seconds(seconds));
+void runGame(Game game){
+	game.run();
 }
 
 int main() {
 	std::cout << "\033[?25l";
-	int maxSeconds = 60;
-	int secondsPassed = 0;
-	while(secondsPassed <= maxSeconds){
-		system("cls");
-		std::cout<< secondsPassed << std::endl;
-		waitTime(1);
-		secondsPassed++;
-	}
+	std::cout << "starting game..";
+	Time* time = new Time();
+	auto game = new Game(time, 0.01f);
+
+	auto canvasEnt = game->createEntity("canvasEnt");
+	canvasEnt->addComponent(CANVAS);
+
+	std::thread gameThread([&] {game -> run();});
+	gameThread.join();
+	return 0;
 }
 

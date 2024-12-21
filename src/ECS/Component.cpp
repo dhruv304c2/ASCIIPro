@@ -1,11 +1,8 @@
 #include "../.././includes/ECS/Component.h"
-#include <iostream>
 
-Component::Component() {
-    // Constructor implementation
+Component::Component(ComponentId compId) : id(compId) {}
+ComponentId Component::compId(){
+    return id;
 }
-
-Component::~Component() {
-    // Destructor implementation
-}
-
+Component::~Component() {}
+void Component::update(Time* time){};

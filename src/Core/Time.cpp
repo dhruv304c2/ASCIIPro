@@ -23,6 +23,7 @@ void Time::waitDelta(){
     auto now = std::chrono::steady_clock().now(); 
     std::chrono::duration<float> duration(delta); 
     std::this_thread::sleep_until(now + duration);
+    time += delta;
 }
 
 Time::~Time() {
