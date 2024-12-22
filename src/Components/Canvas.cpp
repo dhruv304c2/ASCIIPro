@@ -1,8 +1,20 @@
 #include "../.././includes/Components/Canvas.h"
+#include "../../includes/Components/Transform.h"
+#include <algorithm>
 #include <iostream>
+#include <ostream>
 #include <string>
+#include <vector>
 
-Canvas::Canvas() : Component(CANVAS) {
+Canvas::Canvas() : Component() {
+    clearCanvas();
+}
+
+Canvas::~Canvas() {
+    // Destructor implementation
+}
+
+void Canvas::clearCanvas(){
     for(int i=0; i < MAX_Y; i++){
 	for (int j=0; j < MAX_X; j++) {
 	    canvas[i][j] = ' '; 	
@@ -10,14 +22,17 @@ Canvas::Canvas() : Component(CANVAS) {
     }
 }
 
-Canvas::~Canvas() {
-    // Destructor implementation
-}
-
-void Canvas::update(Time* time) {
+void Canvas::update(Time* time, std::vector<Component*> all) {
     std::string wall = "#";
 
     system("cls");
+    clearCanvas();
+
+    for(auto comp : all){
+	if (auto graphic = dynamic_cast<ASCIIGraphic*>(comp)){
+	    drawASCII(*graphic);
+	}
+    }
 
     //add top border to the canvas
     std::string topBoreder = "\n" + wall;
@@ -45,5 +60,31 @@ void Canvas::update(Time* time) {
     }
     bottomBoreder += wall;
     std::cout<< bottomBoreder;
+}
+
+Vector2D Canvas::clipPoint(Vector2D point){
+    int x = std::min(point.x,MAX_X);
+    x = std::max(x,0);
+
+    int y = std::min(point.y,MAX_Y);
+    y = std::max(y,0);
+
+    return Vector2D(x,y);
+}
+
+void Canvas::drawASCII(ASCIIGraphic& graphics){
+    auto transfom = graphics.getAttached<Transform>();
+    auto pos = transfom -> position;
+    auto mat = graphics.ascii();
+    Vector2D topLeft = pos - graphics.center;
+    topLeft = clipPoint(topLeft);
+    Vector2D bottomRight = Vector2D(pos.x + (graphics.width() - graphics.center.x), pos.y + (graphics.height() - graphics.center.y));
+    bottomRight = clipPoint(bottomRight);
+
+    for(int i = topLeft.y; i < bottomRight.y; i++){
+	for(int j=topLeft.x; j < bottomRight.x; j++){
+	    canvas[i][j] = mat[i-topLeft.y][j-topLeft.x];
+	}
+    }
 }
 

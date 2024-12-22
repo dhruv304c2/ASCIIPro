@@ -10,6 +10,7 @@ public:
     ~Game();
     Entity* createEntity(std::string name);
     void run();
+    std::vector<Component*> allComponents();
 private:
     Time* time;
     std::vector<Entity*> entities;
