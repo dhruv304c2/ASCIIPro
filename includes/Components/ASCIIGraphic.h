@@ -10,7 +10,7 @@ class ASCIIGraphic : public Component{
 public:
     ASCIIGraphic();
     ~ASCIIGraphic();
-    Vector2D center = Vector2D(0,0);
+    Vector2D<int> center = Vector2D<int>(0,0);
     int width();
     int height();
     virtual std::vector<std::vector<char>> ascii();

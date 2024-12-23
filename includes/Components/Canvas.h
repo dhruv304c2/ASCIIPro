@@ -12,7 +12,7 @@ public:
     ~Canvas();
     void update(Time *time, std::vector<Component*> all) override;
 private:
-    Vector2D clipPoint(Vector2D point);
+    Vector2D<int> clipPoint(Vector2D<int> point);
     void drawASCII(ASCIIGraphic& graphics);
     void clearCanvas();
     char canvas[50][100];

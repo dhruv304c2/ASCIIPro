@@ -62,28 +62,31 @@ void Canvas::update(Time* time, std::vector<Component*> all) {
     std::cout<< bottomBoreder;
 }
 
-Vector2D Canvas::clipPoint(Vector2D point){
+Vector2D<int> Canvas::clipPoint(Vector2D<int> point){
     int x = std::min(point.x,MAX_X);
     x = std::max(x,0);
 
     int y = std::min(point.y,MAX_Y);
     y = std::max(y,0);
 
-    return Vector2D(x,y);
+    return Vector2D<int>(x,y);
 }
 
 void Canvas::drawASCII(ASCIIGraphic& graphics){
     auto transfom = graphics.getAttached<Transform>();
     auto pos = transfom -> position;
     auto mat = graphics.ascii();
-    Vector2D topLeft = pos - graphics.center;
+    Vector2D<int> topLeft = static_cast<Vector2D<int>>(pos) - graphics.center;
     topLeft = clipPoint(topLeft);
-    Vector2D bottomRight = Vector2D(pos.x + (graphics.width() - graphics.center.x), pos.y + (graphics.height() - graphics.center.y));
+    Vector2D<int> bottomRight = 
+	Vector2D<int>(pos.x + (graphics.width() - graphics.center.x), 
+	    pos.y + (graphics.height() - graphics.center.y));
     bottomRight = clipPoint(bottomRight);
 
     for(int i = topLeft.y; i < bottomRight.y; i++){
 	for(int j=topLeft.x; j < bottomRight.x; j++){
-	    canvas[i][j] = mat[i-topLeft.y][j-topLeft.x];
+	    char pix = mat[i-topLeft.y][j-topLeft.x];
+	    canvas[i][j] = pix;
 	}
     }
 }
