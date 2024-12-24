@@ -2,13 +2,15 @@
 #include <string>
 #include <vector>
 
-Game::Game(Time* time, float delta) {
+Game::Game(float delta) {
+    time = new Time();
     time ->setDelta(delta);
-    this -> time = time;
+    input = new InputManager();
 }
 
 Game::~Game() {
     delete time;
+    delete input;
     for(auto e : entities){
 	delete e;
     };
@@ -31,8 +33,9 @@ Entity* Game::createEntity(std::string name){
 
 void Game::run(){
     while(true){
+	input -> getKeys();
 	for(auto e : entities){
-	    e ->update(time, allComponents());
+	    e ->update(time, allComponents(), input);
 	}
 	time ->waitDelta();
     }

@@ -10,7 +10,7 @@ class Canvas : public Component {
 public:
     Canvas();
     ~Canvas();
-    void update(Time *time, std::vector<Component*> all) override;
+    void update(Time *time, std::vector<Component*> all, InputManager* input) override;
 private:
     Vector2D<int> clipPoint(Vector2D<int> point);
     void drawASCII(ASCIIGraphic& graphics);

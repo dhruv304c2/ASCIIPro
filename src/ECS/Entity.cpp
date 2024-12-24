@@ -7,12 +7,12 @@
 Entity::Entity(std::string name) {
     this ->name = name;
     Transform* transform = dynamic_cast<Transform*>(addComponent<Transform>());
-    transform -> position = Vector2D(0,0);
+    transform -> position = Vector2D<float>(0,0);
 }
 
-void Entity::update(Time* time, std::vector<Component*> all){
+void Entity::update(Time* time, std::vector<Component*> all, InputManager* input){
     for(auto c: components){
-        c ->update(time, all);
+        c ->update(time, all, input);
     }
 }
 

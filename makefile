@@ -1,7 +1,7 @@
 # Variables
 CXX = g++
 CXXFLAGS = -Wall -std=c++17
-TARGET = build/bin/my_program
+TARGET = build/bin/game
 
 # Find all .cpp files in the src directory and its subdirectories
 SRCS = $(wildcard src/*.cpp) $(foreach dir, $(wildcard src/*), $(wildcard $(dir)/*.cpp))
@@ -15,20 +15,23 @@ build:clean setup $(TARGET)
 # Create build directories
 .PHONY: setup
 setup:
-	if not exist build mkdir build
-	if not exist "build/bin" mkdir "build/bin"
-	if not exist "build/obj" mkdir "build/obj"
+	@if not exist build mkdir build
+	@if not exist "build/bin" mkdir "build/bin"
+	@if not exist "build/obj" mkdir "build/obj"
 
 # Rule to link the target executable
 $(TARGET): $(OBJS)
-	$(CXX) $(CXXFLAGS) -o $@ $(OBJS)
+	@echo Building Target: $@ ...
+	@$(CXX) $(CXXFLAGS) -o $@ $(OBJS)
+	@echo Building Success!!
 
 # Rule to compile .cpp files into .o files
 build/obj/%.o: src/%.cpp
-	if not exist "$(@D)" mkdir "$(@D)"
-	$(CXX) $(CXXFLAGS) -c $< -o $@
+	@if not exist "$(@D)" mkdir "$(@D)"
+	@echo compiling $< ...
+	@$(CXX) $(CXXFLAGS) -c $< -o $@
 
 # Clean up build files
 .PHONY: clean
 clean:
-	if exist build rmdir /s /q build
+	@if exist build rmdir /s /q build

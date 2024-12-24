@@ -63,7 +63,7 @@ public:
         throw std::runtime_error(msg.str());
     }
 
-    void update(Time* time, std::vector<Component*> all);
+    void update(Time* time, std::vector<Component*> all, InputManager* input);
     Entity(std::string name);
     ~Entity();
 };

@@ -14,9 +14,10 @@ public:
     int worldMinY = 0;
     int worldMaxY = 49;
     Vector2D<float> speed = Vector2D<float>(1,0);
-    void update(Time* time, std::vector<Component*> all) override;
+    void update(Time* time, std::vector<Component*> all, InputManager* input) override;
 private:
     void wrapPos();
+    void handleInputs(InputManager* input);
 };
 
 #endif

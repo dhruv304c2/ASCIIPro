@@ -1,6 +1,5 @@
 #include <iostream>
 #include <thread>
-#include "../includes/Core/Time.h"
 #include "../includes/Core/Game.h"
 #include "../includes/Components/Canvas.h"
 #include "../includes/Components/ASCIISprite.h"
@@ -14,8 +13,8 @@ void runGame(Game game){
 int main() {
 	std::cout << "\033[?25l";
 	std::cout << "starting game..";
-	Time* time = new Time();
-	auto game = new Game(time, 0.1f);
+
+	auto game = new Game(0.1f);
 
 	auto canvasEnt = game->createEntity("canvasEnt");
 	canvasEnt->addComponent<Canvas>();
@@ -32,12 +31,7 @@ int main() {
 	 {'#','#','#'},
 	 {'#','#','#'},};
 
-	std::thread gameThread([&] {game -> run();});
-	while (true) {
-		if (GetAsyncKeyState('W') & 0x8000) {
-		    std::cout << "Moving Up!" << std::endl;
-		}
-	}
+	std::thread gameThread([&] {game -> run();});	
 	gameThread.join();
 	return 0;
 }

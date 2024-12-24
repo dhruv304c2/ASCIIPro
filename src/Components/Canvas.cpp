@@ -22,7 +22,7 @@ void Canvas::clearCanvas(){
     }
 }
 
-void Canvas::update(Time* time, std::vector<Component*> all) {
+void Canvas::update(Time* time, std::vector<Component*> all, InputManager* input) {
     std::string wall = "#";
 
     system("cls");

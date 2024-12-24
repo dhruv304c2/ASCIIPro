@@ -2,6 +2,7 @@
 #define COMPONENT_H
 
 #include "../Core/Time.h"
+#include "../Core/InputManager.h"
 #include <functional>
 #include <sstream>
 #include <stdexcept>
@@ -17,7 +18,7 @@ class Component {
 public:
     Component();
     virtual ~Component();
-    virtual void update(Time *time, std::vector<Component*>);
+    virtual void update(Time *time, std::vector<Component*>, InputManager* input);
     std::vector<Component *> attached;
     std::vector<Component *> all;
     bool isAttached(Component* comp);
