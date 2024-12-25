@@ -1,7 +1,10 @@
 #include <iostream>
 #include <thread>
-#include "../includes/Core/Time.h"
 #include "../includes/Core/Game.h"
+#include "../includes/Components/Canvas.h"
+#include "../includes/Components/ASCIISprite.h"
+#include "../includes/SnakeGame/PlayerMovementController.h"
+#include <windows.h>
 
 void runGame(Game game){
 	game.run();
@@ -10,13 +13,25 @@ void runGame(Game game){
 int main() {
 	std::cout << "\033[?25l";
 	std::cout << "starting game..";
-	Time* time = new Time();
-	auto game = new Game(time, 0.01f);
+
+	auto game = new Game(0.1f);
 
 	auto canvasEnt = game->createEntity("canvasEnt");
-	canvasEnt->addComponent(CANVAS);
+	canvasEnt->addComponent<Canvas>();
 
-	std::thread gameThread([&] {game -> run();});
+	auto sprite = game -> createEntity("sprite");
+	sprite -> getComponent<Transform>() -> position = Vector2D<float>(50,25);
+
+	auto playerMvtCmp = sprite -> addComponent<PlayerMovementController>();
+	playerMvtCmp -> speed = Vector2D<float>(1,1);
+
+	auto sprite_cmp = sprite->addComponent<ASCIISprite>();
+	sprite_cmp -> sprite =
+	{{'#','#','#'},
+	 {'#','#','#'},
+	 {'#','#','#'},};
+
+	std::thread gameThread([&] {game -> run();});	
 	gameThread.join();
 	return 0;
 }

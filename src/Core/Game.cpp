@@ -1,17 +1,28 @@
 #include "../.././includes/Core/Game.h"
 #include <string>
+#include <vector>
 
-Game::Game(Time* time, float delta) {
+Game::Game(float delta) {
+    time = new Time();
     time ->setDelta(delta);
-    this -> time = time;
+    input = new InputManager();
 }
 
 Game::~Game() {
     delete time;
+    delete input;
     for(auto e : entities){
 	delete e;
     };
     entities.clear();
+}
+
+std::vector<Component*> Game::allComponents() {
+    std::vector<Component*> all;
+    for(auto e : entities){
+	all.insert(all.end(),e->components.begin(), e->components.end());
+    }
+    return all;
 }
 
 Entity* Game::createEntity(std::string name){
@@ -22,8 +33,9 @@ Entity* Game::createEntity(std::string name){
 
 void Game::run(){
     while(true){
+	input -> getKeys();
 	for(auto e : entities){
-	    e ->update(time);
+	    e ->update(time, allComponents(), input);
 	}
 	time ->waitDelta();
     }
