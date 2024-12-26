@@ -7,7 +7,7 @@ all: compile build
 
 # Compile CMake into the build directory
 compile:
-	cmake -S . -B $(BUILD_DIR)
+	cmake -G "Ninja" -S . -B $(BUILD_DIR)
 
 # Build the project
 build: compile
