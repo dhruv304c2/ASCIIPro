@@ -39,7 +39,7 @@ void PlayerMovementController::wrapPos(){
 	x = worldMinX;
     }
     if(x < worldMinX){
-	x = worldMinX;
+	x = worldMaxX;
     }
     if(y > worldMaxY){
 	y = worldMinY;

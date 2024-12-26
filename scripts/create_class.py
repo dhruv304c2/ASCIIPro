@@ -15,6 +15,8 @@ def create_class(class_name, base_path="", sub_path=""):
     header_file = os.path.join(include_dir, f"{class_name}.h")
     source_file = os.path.join(src_dir, f"{class_name}.cpp")
 
+    include_path = os.path.relpath(include_dir, src_dir)
+
     # Create directories if they don't exist
     os.makedirs(include_dir, exist_ok=True)
     os.makedirs(src_dir, exist_ok=True)
@@ -31,9 +33,9 @@ public:
 
 #endif
 """
-
+    directive = standard_path(f"{include_path}/{class_name}.h")
     # Boilerplate code for .cpp
-    source_boilerplate = f"""#include "../../{standard_path(header_file)}"
+    source_boilerplate = f"""#include "{directive}"
 #include <iostream>
 
 {class_name}::{class_name}() {{

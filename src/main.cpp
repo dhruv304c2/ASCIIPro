@@ -22,14 +22,12 @@ int main() {
 	auto sprite = game -> createEntity("sprite");
 	sprite -> getComponent<Transform>() -> position = Vector2D<float>(50,25);
 
-	auto playerMvtCmp = sprite -> addComponent<PlayerMovementController>();
-	playerMvtCmp -> speed = Vector2D<float>(1,1);
+	auto player_mvt_cmp = sprite -> addComponent<PlayerMovementController>();
+	player_mvt_cmp -> speed = Vector2D<float>(1,1);
 
+	auto player_sprite_exp = SpriteExport("../resources/sprite.txt");
 	auto sprite_cmp = sprite->addComponent<ASCIISprite>();
-	sprite_cmp -> sprite =
-	{{'#','#','#'},
-	 {'#','#','#'},
-	 {'#','#','#'},};
+	sprite_cmp -> useExport(player_sprite_exp);	
 
 	std::thread gameThread([&] {game -> run();});	
 	gameThread.join();

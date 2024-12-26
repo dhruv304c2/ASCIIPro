@@ -76,12 +76,18 @@ void Canvas::drawASCII(ASCIIGraphic& graphics){
     auto transfom = graphics.getAttached<Transform>();
     auto pos = transfom -> position;
     auto mat = graphics.ascii();
-    Vector2D<int> topLeft = static_cast<Vector2D<int>>(pos) - graphics.center;
-    topLeft = clipPoint(topLeft);
-    Vector2D<int> bottomRight = 
-	Vector2D<int>(pos.x + (graphics.width() - graphics.center.x), 
-	    pos.y + (graphics.height() - graphics.center.y));
-    bottomRight = clipPoint(bottomRight);
+
+    Vector2D<int> topLeft = clipPoint(pos - graphics.center);
+    Vector2D<int> size = Vector2D<int>(graphics.width(), graphics.height());
+    Vector2D<int> bottomRight = clipPoint(pos + size - graphics.center);
+
+    std::cout << "top left: " <<topLeft.toString() << std::endl;
+    std::cout << "bottom right: " << bottomRight.toString() << std::endl;
+    std::cout << "graphic pos: " << pos.toString() << std::endl;
+    std::cout << "graphic center: " << graphics.center.toString() << std::endl;
+    std::cout << "size: " << size.toString() << std::endl;
+
+    graphics.debugPrint();
 
     for(int i = topLeft.y; i < bottomRight.y; i++){
 	for(int j=topLeft.x; j < bottomRight.x; j++){

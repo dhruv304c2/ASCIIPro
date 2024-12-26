@@ -5,7 +5,7 @@
 #include <vector>
 
 Entity::Entity(std::string name) {
-    this ->name = name;
+    this ->name = std::move(name);
     Transform* transform = dynamic_cast<Transform*>(addComponent<Transform>());
     transform -> position = Vector2D<float>(0,0);
 }
