@@ -48,13 +48,13 @@ add_executable(game ${SRC_FILES})
 target_link_libraries(game PRIVATE ftxui::screen ftxui::dom ftxui::component)
 
 # Enable warnings
-if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-    target_compile_options(game PRIVATE -Wall -Wextra -pedantic)
-endif()
-
-if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
-    target_compile_options(game PRIVATE /W4 /permissive-)
-endif()
+# if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+#     target_compile_options(game PRIVATE -Wall -Wextra -pedantic)
+# endif()
+#
+# if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+#     target_compile_options(game PRIVATE /W4 /permissive-)
+# endif()
 
 # Copy resources to the build directory
 add_custom_target(
