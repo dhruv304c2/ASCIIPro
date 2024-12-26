@@ -2,6 +2,8 @@
 #define TRANSFORM_H
 
 #include "../ECS/Component.h"
+#include <string>
+#include <sstream>
 
 template <typename T>
 class Vector2D{
@@ -30,6 +32,12 @@ class Vector2D{
             TCast x = static_cast<TCast>(this ->x);
             TCast y = static_cast<TCast>(this ->y);
             return Vector2D<TCast>(x,y);
+        }
+
+        std::string toString(){
+            std::ostringstream oss;
+            oss << "(" << x << "," << y << ")";
+            return oss.str();
         }
 };
 

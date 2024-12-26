@@ -14,6 +14,7 @@ public:
     int width();
     int height();
     virtual std::vector<std::vector<char>> ascii();
+    void debugPrint();
 };
 
 #endif

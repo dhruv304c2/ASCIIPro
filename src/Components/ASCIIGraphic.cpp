@@ -1,4 +1,6 @@
 #include "../.././includes/Components/ASCIIGraphic.h"
+#include <iostream>
+#include <ostream>
 #include <vector>
 
 ASCIIGraphic::ASCIIGraphic() {}
@@ -19,5 +21,15 @@ int ASCIIGraphic::height(){
 
 std::vector<std::vector<char>> ASCIIGraphic::ascii(){
     return {};
+}
+
+void ASCIIGraphic::debugPrint(){
+    std::cout << std::endl;
+    for(auto line : ascii()){
+	for(auto c: line){
+	    std::cout << c;
+	}
+	std::cout << std::endl;
+    }
 }
 

@@ -1,3 +1,4 @@
+SHELL := /bin/bash
 # Variables
 CXX = g++
 CXXFLAGS = -Wall -std=c++17
@@ -10,13 +11,19 @@ SRCS = $(wildcard src/*.cpp) $(foreach dir, $(wildcard src/*), $(wildcard $(dir)
 OBJS = $(SRCS:src/%.cpp=build/obj/%.o)
 
 # Default target
-build:clean setup $(TARGET)
+build: export_res $(TARGET)
+
+# Export resources
+export_res: setup
+	@echo moving resources
+	@copy ".\resources\*" ".\build\resources"
 
 # Create build directories
 .PHONY: setup
-setup:
+setup: clean
 	@if not exist build mkdir build
 	@if not exist "build/bin" mkdir "build/bin"
+	@if not exist "build/resources" mkdir "build/resources"
 	@if not exist "build/obj" mkdir "build/obj"
 
 # Rule to link the target executable
