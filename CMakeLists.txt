@@ -1,7 +1,8 @@
+
 # Minimum required version of CMake
 cmake_minimum_required(VERSION 3.15)
 
-# compile commands for lsp
+# Compile commands for LSP
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # Project name and version
@@ -16,7 +17,9 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/build/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/build/lib)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/build/lib)
 
-# Include ftxui
+#========Include Dependencies=============f
+
+#FTXUI
 include(FetchContent)
 
 FetchContent_Declare(ftxui
@@ -30,6 +33,8 @@ if(NOT ftxui_POPULATED)
   add_subdirectory(${ftxui_SOURCE_DIR} ${ftxui_BINARY_DIR} EXCLUDE_FROM_ALL)
 endif()
 
+#==========================================
+
 # Add include directories
 include_directories(${CMAKE_SOURCE_DIR}/includes)
 
@@ -42,6 +47,15 @@ add_executable(game ${SRC_FILES})
 # Link ftxui to the game executable
 target_link_libraries(game PRIVATE ftxui::screen ftxui::dom ftxui::component)
 
+# Enable warnings
+if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+    target_compile_options(game PRIVATE -Wall -Wextra -pedantic)
+endif()
+
+if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+    target_compile_options(game PRIVATE /W4 /permissive-)
+endif()
+
 # Copy resources to the build directory
 add_custom_target(
     copy_resources ALL
@@ -51,12 +65,12 @@ add_custom_target(
 )
 add_dependencies(game copy_resources)
 
-# Optional: Enable warnings
-if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-    target_compile_options(game PRIVATE -Wall -Wextra -pedantic)
-endif()
-
-if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
-    target_compile_options(game PRIVATE /W4)
-endif()
+# Final step: Place the executable and resources in the game folder
+add_custom_command(
+    TARGET game POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/game/resources
+    COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/game/target
+    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:game> ${CMAKE_BINARY_DIR}/game/target/
+    COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/resources ${CMAKE_BINARY_DIR}/game/resources/
+)
 

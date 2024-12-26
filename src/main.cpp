@@ -32,4 +32,3 @@ int main() {
 	gameThread.join();
 	return 0;
 }
-

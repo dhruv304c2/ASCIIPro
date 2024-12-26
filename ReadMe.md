@@ -9,14 +9,22 @@ make sure you have
 - cmake
 - ninja
 
-### Compiling dependencies
+### Install and compile dependencies
 
 ```
-    cmake -G "Ninja" -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -S . -B .
+    make compile
 ```
 
 ### Building Project
 
 ```
-    cmake --build build
+    make build
+```
+
+### Run Project
+
+> **Note:** run build and compile commands as a pre-requisite.
+
+```
+    make run 
 ```
