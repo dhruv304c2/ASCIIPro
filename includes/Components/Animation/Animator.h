@@ -4,7 +4,6 @@
 #include "../../ECS/Component.h"
 #include <vector>
 
-
 class KeyFrame{
 public:
     virtual void executeFrame();
