@@ -1,18 +1,20 @@
 # Minimum required version of CMake
 cmake_minimum_required(VERSION 3.15)
 
+# compile commands for lsp
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 # Project name and version
 project(GameProject VERSION 1.0)
 
 # Set the C++ standard
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # Output directories
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}build/bin)
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}build/lib)
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}build/lib)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/build/bin)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/build/lib)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/build/lib)
 
 # Include ftxui
 include(FetchContent)
@@ -37,6 +39,9 @@ file(GLOB_RECURSE SRC_FILES ${CMAKE_SOURCE_DIR}/src/*.cpp)
 # Add the executable
 add_executable(game ${SRC_FILES})
 
+# Link ftxui to the game executable
+target_link_libraries(game PRIVATE ftxui::screen ftxui::dom ftxui::component)
+
 # Copy resources to the build directory
 add_custom_target(
     copy_resources ALL
@@ -54,3 +59,4 @@ endif()
 if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     target_compile_options(game PRIVATE /W4)
 endif()
+

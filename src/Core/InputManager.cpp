@@ -1,5 +1,4 @@
 #include "../.././includes/Core/InputManager.h"
-#include <iostream>
 #include <windows.h>
 #include <winuser.h>
 
@@ -13,8 +12,7 @@ InputManager::InputManager() {
     }
 }
 
-InputManager::~InputManager() {
-}
+InputManager::~InputManager() {}
 
 KeyState handleKeyDown(KeyState current){
     switch (current) {

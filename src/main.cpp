@@ -4,7 +4,6 @@
 #include "../includes/Components/Canvas.h"
 #include "../includes/Components/ASCIISprite.h"
 #include "../includes/SnakeGame/PlayerMovementController.h"
-#include <windows.h>
 
 void runGame(Game game){
 	game.run();
