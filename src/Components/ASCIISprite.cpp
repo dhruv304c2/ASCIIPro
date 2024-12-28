@@ -1,4 +1,4 @@
-#include "../.././includes/Components/ASCIISprite.h"
+#include "Components/ASCIISprite.h"
 #include <vector>
 
 ASCIISprite::ASCIISprite() {}

@@ -1,4 +1,4 @@
-#include "../../../includes/Components/Animation/Animator.h"
+#include "Components/Animation/Animator.h"
 
 Animator::Animator() {}
 

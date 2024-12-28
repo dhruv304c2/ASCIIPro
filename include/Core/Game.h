@@ -1,9 +1,9 @@
 #ifndef GAME_H
 #define GAME_H
-#include "InputManager.h"
+#include "Core/Input/InputManager.h"
+#include "ECS/Entity.h"
 #include "Time.h"
 #include <vector>
-#include "../ECS/Entity.h"
 
 class Game {
 public:
