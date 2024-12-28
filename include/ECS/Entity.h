@@ -2,11 +2,11 @@
 #define ENTITY_H
 
 #include <string>
-#include <type_traits>
 #include <vector>
 #include <algorithm>
 #include <sstream>
 #include <stdexcept>
+#include "Core/Input/InputManager.h"
 #include "./Component.h"
 
 class Entity {

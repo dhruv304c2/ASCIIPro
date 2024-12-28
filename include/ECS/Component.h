@@ -2,8 +2,7 @@
 #define COMPONENT_H
 
 #include "../Core/Time.h"
-#include "../Core/InputManager.h"
-#include <functional>
+#include "../Core/Input/InputManager.h"
 #include <sstream>
 #include <stdexcept>
 #include <vector>

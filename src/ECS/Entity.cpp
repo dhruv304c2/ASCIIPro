@@ -1,6 +1,6 @@
-#include "../.././includes/ECS/Entity.h"
-#include "../../includes/Components/Transform.h"
-#include "../../includes/ECS/Component.h"
+#include "ECS/Entity.h"
+#include "Components/Transform.h"
+#include "ECS/Component.h"
 #include <string>
 #include <vector>
 

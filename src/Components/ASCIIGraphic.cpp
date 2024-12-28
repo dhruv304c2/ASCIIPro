@@ -1,4 +1,4 @@
-#include "../.././includes/Components/ASCIIGraphic.h"
+#include "Components/ASCIIGraphic.h"
 #include <iostream>
 #include <ostream>
 #include <vector>

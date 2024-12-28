@@ -35,8 +35,15 @@ endif()
 
 #==========================================
 
+# Add link libraries
+set(LINKS 
+    ftxui::screen 
+    ftxui::dom 
+    ftxui::component
+)
+
 # Add include directories
-include_directories(${CMAKE_SOURCE_DIR}/includes)
+include_directories(${CMAKE_SOURCE_DIR}/include)
 
 # Add source files
 file(GLOB_RECURSE SRC_FILES ${CMAKE_SOURCE_DIR}/src/*.cpp)
@@ -45,7 +52,19 @@ file(GLOB_RECURSE SRC_FILES ${CMAKE_SOURCE_DIR}/src/*.cpp)
 add_executable(game ${SRC_FILES})
 
 # Link ftxui to the game executable
-target_link_libraries(game PRIVATE ftxui::screen ftxui::dom ftxui::component)
+target_link_libraries(game PRIVATE ${LINKS})
+
+# Add Compiler flags
+
+if (WIN32)
+    target_compile_options(game PRIVATE
+        -std=c++17
+    )
+elseif (UNIX)
+    target_compile_options(game PRIVATE
+        -fexec -charset=UTF-8
+    )
+endif()
 
 # Enable warnings
 # if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")

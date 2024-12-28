@@ -1,9 +1,9 @@
 #include <iostream>
 #include <thread>
-#include "../includes/Core/Game.h"
-#include "../includes/Components/Canvas.h"
-#include "../includes/Components/ASCIISprite.h"
-#include "../includes/SnakeGame/PlayerMovementController.h"
+#include "Core/Game.h"
+#include "Components/Canvas.h"
+#include "Components/ASCIISprite.h"
+#include "SnakeGame/PlayerMovementController.h"
 
 void runGame(Game game){
 	game.run();

@@ -1,9 +1,6 @@
-#include "../../../includes/Core/Sprite/SpriteExport.h"
-
-
+#include "Core/Sprite/SpriteExport.h"
 #include <fstream>
 #include <iostream>
-#include <ostream>
 #include <stdexcept>
 #include <vector>
 

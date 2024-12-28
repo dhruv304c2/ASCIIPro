@@ -1,4 +1,4 @@
-#include "../.././includes/SnakeGame/PlayerMovementController.h"
+#include "SnakeGame/PlayerMovementController.h"
 
 PlayerMovementController::PlayerMovementController() {}
 

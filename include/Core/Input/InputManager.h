@@ -2,7 +2,6 @@
 #define INPUTMANAGER_H
 
 #include <map>
-#include <string>
 
 enum Key{
     None,
@@ -33,6 +32,8 @@ public:
     InputManager();
     ~InputManager();
     void getKeys();
+    bool getKeyStateAsync(Key key);
+    int getPlatformKeyCode(Key key);
     bool isKey(Key key);
     bool isKeyUp(Key key);
     bool isKeyDown(Key key);

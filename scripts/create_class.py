@@ -6,7 +6,7 @@ def standard_path(input_string):
 
 
 def create_class(class_name, base_path="", sub_path=""):
-    include_dir = os.path.join(base_path, "includes")
+    include_dir = os.path.join(base_path, "include")
     include_dir = os.path.join(include_dir, sub_path)
     src_dir = os.path.join(base_path, "src")
     src_dir = os.path.join(src_dir, sub_path)
@@ -33,7 +33,7 @@ public:
 
 #endif
 """
-    directive = standard_path(f"{include_path}/{class_name}.h")
+    directive = standard_path(f"{sub_dir}/{class_name}.h")
     # Boilerplate code for .cpp
     source_boilerplate = f"""#include "{directive}"
 #include <iostream>

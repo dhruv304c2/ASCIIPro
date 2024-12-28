@@ -1,18 +1,23 @@
-#include "../.././includes/Components/Canvas.h"
-#include "../../includes/Components/Transform.h"
-#include <algorithm>
+#include "Components/Canvas.h"
+#include "Components/Transform.h"
 #include <iostream>
 #include <ostream>
 #include <string>
 #include <vector>
 
+#ifdef _WIN32
+#include <windows.h>
+#endif
+
 Canvas::Canvas() : Component() {
     clearCanvas();
+
+    #ifdef _WIN32
+    SetConsoleOutputCP(CP_UTF8);
+    #endif
 }
 
-Canvas::~Canvas() {
-    // Destructor implementation
-}
+Canvas::~Canvas() {}
 
 void Canvas::clearCanvas(){
     for(int i=0; i < MAX_Y; i++){
@@ -23,7 +28,7 @@ void Canvas::clearCanvas(){
 }
 
 void Canvas::update(Time* time, std::vector<Component*> all, InputManager* input) {
-    std::string wall = "#";
+    std::string wall = u8"▮";
 
     system("cls");
     clearCanvas();
@@ -81,13 +86,13 @@ void Canvas::drawASCII(ASCIIGraphic& graphics){
     Vector2D<int> size = Vector2D<int>(graphics.width(), graphics.height());
     Vector2D<int> bottomRight = clipPoint(pos + size - graphics.center);
 
-    std::cout << "top left: " <<topLeft.toString() << std::endl;
-    std::cout << "bottom right: " << bottomRight.toString() << std::endl;
-    std::cout << "graphic pos: " << pos.toString() << std::endl;
-    std::cout << "graphic center: " << graphics.center.toString() << std::endl;
-    std::cout << "size: " << size.toString() << std::endl;
-
-    graphics.debugPrint();
+    //std::cout << "top left: " <<topLeft.toString() << std::endl;
+    //std::cout << "bottom right: " << bottomRight.toString() << std::endl;
+    //std::cout << "graphic pos: " << pos.toString() << std::endl;
+    //std::cout << "graphic center: " << graphics.center.toString() << std::endl;
+    //std::cout << "size: " << size.toString() << std::endl;
+    
+    //graphics.debugPrint();
 
     for(int i = topLeft.y; i < bottomRight.y; i++){
 	for(int j=topLeft.x; j < bottomRight.x; j++){
