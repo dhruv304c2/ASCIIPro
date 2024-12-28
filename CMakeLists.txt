@@ -66,21 +66,16 @@ elseif (UNIX)
     )
 endif()
 
-# Copy resources to the build directory
-add_custom_target(
-    copy_resources ALL
-    COMMAND ${CMAKE_COMMAND} -E copy_directory
-        ${CMAKE_SOURCE_DIR}/resources
-        ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/resources
-)
-add_dependencies(game copy_resources)
-
 # Final step: Place the executable and resources in the game folder
 add_custom_command(
-    TARGET game POST_BUILD
+    TARGET game PRE_BUILD
     COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/game/resources
+    COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/resources ${CMAKE_BINARY_DIR}/game/resources/
+)
+
+add_custom_command(
+    TARGET game POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/game/target
     COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:game> ${CMAKE_BINARY_DIR}/game/target/
-    COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/resources ${CMAKE_BINARY_DIR}/game/resources/
 )
 
