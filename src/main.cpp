@@ -1,4 +1,5 @@
 #include <iostream>
+#include <ostream>
 #include <thread>
 #include "Core/Game.h"
 #include "Components/Canvas.h"
@@ -11,7 +12,7 @@ void runGame(Game game){
 
 int main() {
 	std::cout << "\033[?25l";
-	std::cout << "starting game..";
+	std::cout << "starting game.." << std::endl;
 
 	auto game = new Game(0.1f);
 

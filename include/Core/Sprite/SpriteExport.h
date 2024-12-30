@@ -1,8 +1,6 @@
 #ifndef SPRITEEXPORT_H
 #define SPRITEEXPORT_H
 
-#include <algorithm>
-#include <random>
 #include <string>
 #include <vector>
 
@@ -26,13 +24,13 @@ public:
     ~SpriteExport();
     void useSlicing(Slicing slicing);
     SpriteExport asUnsliced();
-    std::vector<std::vector<std::vector<char>>> sliced();
-    std::vector<std::vector<char>> rawImage();
+    std::vector<std::vector<std::vector<wchar_t>>> sliced();
+    std::vector<std::vector<wchar_t>> rawImage();
 private:
     std::string path;
     Slicing* slicing;
-    std::vector<std::vector<char>> raw;
-    std::vector<std::vector<std::vector<char>>> sliced_arr;
+    std::vector<std::vector<wchar_t>> raw;
+    std::vector<std::vector<std::vector<wchar_t>>> sliced_arr;
 
     void usePath(std::string path);
     void readRaw();

@@ -10,10 +10,10 @@ public:
     ASCIISprite();
     ~ASCIISprite();
     void useExport(SpriteExport &exported);
-    std::vector<std::vector<char>> sprite();
-    std::vector<std::vector<char>> ascii() override;
+    std::vector<std::vector<wchar_t>> sprite();
+    std::vector<std::vector<wchar_t>> pixelMatrix() override;
 protected:
-    std::vector<std::vector<char>> sprite_mat;
+    std::vector<std::vector<wchar_t>> sprite_mat;
 };
 
 #endif

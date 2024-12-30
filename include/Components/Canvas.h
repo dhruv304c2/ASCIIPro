@@ -15,7 +15,7 @@ private:
     Vector2D<int> clipPoint(Vector2D<int> point);
     void drawASCII(ASCIIGraphic& graphics);
     void clearCanvas();
-    char canvas[50][100];
+    wchar_t canvas[50][100];
     const int MAX_X = 99;
     const int MAX_Y = 49;
 };
