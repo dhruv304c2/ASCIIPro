@@ -1,4 +1,4 @@
-#include "../.././includes/Components/ASCIIGraphic.h"
+#include "Components/ASCIIGraphic.h"
 #include <iostream>
 #include <ostream>
 #include <vector>
@@ -7,7 +7,7 @@ ASCIIGraphic::ASCIIGraphic() {}
 ASCIIGraphic::~ASCIIGraphic() {}
 
 int ASCIIGraphic::width(){
-    auto mat = ascii();
+    auto mat = pixelMatrix();
     if(mat.size() > 0){
 	return mat[0].size();
     }
@@ -15,21 +15,21 @@ int ASCIIGraphic::width(){
 }
 
 int ASCIIGraphic::height(){
-    auto mat = ascii();
+    auto mat = pixelMatrix();
     return mat.size();
 }
 
-std::vector<std::vector<char>> ASCIIGraphic::ascii(){
+std::vector<std::vector<wchar_t>> ASCIIGraphic::pixelMatrix(){
     return {};
 }
 
 void ASCIIGraphic::debugPrint(){
-    std::cout << std::endl;
-    for(auto line : ascii()){
+    std::wcout << std::endl;
+    for(auto line : pixelMatrix()){
 	for(auto c: line){
-	    std::cout << c;
+	    std::wcout << c;
 	}
-	std::cout << std::endl;
+	std::wcout << std::endl;
     }
 }
 

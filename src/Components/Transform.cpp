@@ -1,4 +1,4 @@
-#include "../.././includes/Components/Transform.h"
+#include "Components/Transform.h"
 
 Transform::Transform() {
 }

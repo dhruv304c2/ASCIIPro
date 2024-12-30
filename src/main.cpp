@@ -1,9 +1,10 @@
 #include <iostream>
+#include <ostream>
 #include <thread>
-#include "../includes/Core/Game.h"
-#include "../includes/Components/Canvas.h"
-#include "../includes/Components/ASCIISprite.h"
-#include "../includes/SnakeGame/PlayerMovementController.h"
+#include "Core/Game.h"
+#include "Components/Canvas.h"
+#include "Components/ASCIISprite.h"
+#include "SnakeGame/PlayerMovementController.h"
 
 void runGame(Game game){
 	game.run();
@@ -11,7 +12,7 @@ void runGame(Game game){
 
 int main() {
 	std::cout << "\033[?25l";
-	std::cout << "starting game..";
+	std::cout << "starting game.." << std::endl;
 
 	auto game = new Game(0.1f);
 

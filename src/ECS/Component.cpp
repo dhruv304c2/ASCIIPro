@@ -1,4 +1,4 @@
-#include "../.././includes/ECS/Component.h"
+#include "ECS/Component.h"
 
 Component::Component(){}
 

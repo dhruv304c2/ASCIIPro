@@ -4,7 +4,7 @@ import os
 def find_and_remove_class(class_name, base_path="."):
     # Directories to search for .cpp and .h files
     src_dir = os.path.join(base_path, "src")
-    include_dir = os.path.join(base_path, "includes")
+    include_dir = os.path.join(base_path, "include")
 
     # Search and remove .cpp and .h files recursively
     remove_file_in_subdirs(src_dir, f"{class_name}.cpp")

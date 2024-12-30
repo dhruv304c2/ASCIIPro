@@ -1,32 +1,62 @@
-#include "../.././includes/Components/Canvas.h"
-#include "../../includes/Components/Transform.h"
-#include <algorithm>
+#include "Components/Canvas.h"
+#include "Components/Transform.h"
+#include <cstdlib>
 #include <iostream>
 #include <ostream>
 #include <string>
 #include <vector>
+#ifdef _WIN32
+#define NOMINMAX
+#include <windows.h>
+#endif
+#include <algorithm>
+#include <unicode/unistr.h>
+
+std::string wstringToUtf8(const std::wstring& wideContent) {
+    icu::UnicodeString unicodeStr(reinterpret_cast<const UChar*>(wideContent.data()), wideContent.length());
+    std::string utf8Content;
+    unicodeStr.toUTF8String(utf8Content);
+    return utf8Content;
+}
 
 Canvas::Canvas() : Component() {
+    std::cout<<"Initializing canvas..." << std::endl;
     clearCanvas();
+    setvbuf(stdout, nullptr, _IONBF, 0);
+    #ifdef _WIN32
+    SetConsoleOutputCP(CP_UTF8);
+    #endif
 }
 
-Canvas::~Canvas() {
-    // Destructor implementation
-}
+Canvas::~Canvas() {}
 
 void Canvas::clearCanvas(){
-    for(int i=0; i < MAX_Y; i++){
-	for (int j=0; j < MAX_X; j++) {
-	    canvas[i][j] = ' '; 	
+    for(int i=0; i <= MAX_Y; i++){
+	for (int j=0; j <= MAX_X; j++) {
+	    canvas[i][j] = L' '; 	
 	}
     }
 }
 
-void Canvas::update(Time* time, std::vector<Component*> all, InputManager* input) {
-    std::string wall = "#";
 
+void clearScreen() {
     system("cls");
+#ifdef _WIN32
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    COORD coord = {0, 0};
+    SetConsoleCursorPosition(hConsole, coord);
+#else
+    std::wcout << L"\033[H"; // ANSI escape code for cursor home
+#endif
+}
+
+void Canvas::update(Time* time, std::vector<Component*> all, InputManager* input) {
+    //std::cout << "Rendering" << std::endl;
+;
+    clearScreen();
     clearCanvas();
+
+    std::wstring wall = L"#";
 
     for(auto comp : all){
 	if (auto graphic = dynamic_cast<ASCIIGraphic*>(comp)){
@@ -34,32 +64,29 @@ void Canvas::update(Time* time, std::vector<Component*> all, InputManager* input
 	}
     }
 
-    //add top border to the canvas
-    std::string topBoreder = "\n" + wall;
-    for(int j=0; j < MAX_X; j++){
-	topBoreder += wall;
-    }
+    std::wstring border = wall;
+    for(int i =0; i <= MAX_X; i++) border += wall;
+    border += wall;
 
-    topBoreder += wall;
-    std::cout<< topBoreder << std::endl;
+    std::wstring frame_buffer;
+
+    //add top border to the canvas
+    frame_buffer += L"\n"  + border + L"\n";
 
     //Draw canvas lines with left and right borders
-    for(int i=0; i< MAX_Y; i++){
-	std::string line = wall;
-	for(int j=0; j < MAX_X; j++){
-	    line += canvas[i][j];
+    for(int i=0; i<= MAX_Y; i++){
+	frame_buffer += wall;
+	for(int j=0; j <= MAX_X; j++){ 
+	    frame_buffer += canvas[i][j];
 	}
-	line += wall;
-	std::cout << line << std::endl;
+	frame_buffer += wall;
+	frame_buffer += L"\n";
     }
 
     //draw bottom border
-    std::string bottomBoreder = wall;
-    for(int j=0; j < MAX_X; j++){
-	bottomBoreder += wall;
-    }
-    bottomBoreder += wall;
-    std::cout<< bottomBoreder;
+    frame_buffer += border + L"\n";
+    std::string utf8_frame_buffer = wstringToUtf8(frame_buffer);
+    std::cout << utf8_frame_buffer; 
 }
 
 Vector2D<int> Canvas::clipPoint(Vector2D<int> point){
@@ -75,7 +102,7 @@ Vector2D<int> Canvas::clipPoint(Vector2D<int> point){
 void Canvas::drawASCII(ASCIIGraphic& graphics){
     auto transfom = graphics.getAttached<Transform>();
     auto pos = transfom -> position;
-    auto mat = graphics.ascii();
+    auto mat = graphics.pixelMatrix();
 
     Vector2D<int> topLeft = clipPoint(pos - graphics.center);
     Vector2D<int> size = Vector2D<int>(graphics.width(), graphics.height());
@@ -85,13 +112,16 @@ void Canvas::drawASCII(ASCIIGraphic& graphics){
     std::cout << "bottom right: " << bottomRight.toString() << std::endl;
     std::cout << "graphic pos: " << pos.toString() << std::endl;
     std::cout << "graphic center: " << graphics.center.toString() << std::endl;
-    std::cout << "size: " << size.toString() << std::endl;
-
-    graphics.debugPrint();
+    std::cout << "size: " << size.toString() << std::endl; 
+    // graphics.debugPrint();
 
     for(int i = topLeft.y; i < bottomRight.y; i++){
 	for(int j=topLeft.x; j < bottomRight.x; j++){
-	    char pix = mat[i-topLeft.y][j-topLeft.x];
+	    int pix_i = i-topLeft.y;
+	    int pix_j = j-topLeft.x;
+	    if(pix_i > mat.size() -1) continue;
+	    if(pix_j > mat[pix_i].size() -1) continue;
+	    wchar_t pix = mat[pix_i][pix_j];
 	    canvas[i][j] = pix;
 	}
     }
