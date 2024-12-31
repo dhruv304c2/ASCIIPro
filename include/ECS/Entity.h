@@ -1,6 +1,7 @@
 #ifndef ENTITY_H
 #define ENTITY_H
 
+#include <iostream>
 #include <string>
 #include <vector>
 #include <algorithm>
@@ -16,14 +17,16 @@ public:
 
     template <typename T>
     T* addComponent(){
+        std::cout << "adding component of type:" << typeid(T).name() << std::endl;
         if(hasComponent<T>()){
             std::ostringstream msg;
             msg << "Component of type" << typeid(T).name() << "already exists on the entity";
             throw std::runtime_error(msg.str());
         }
         Component* component;
-        component = dynamic_cast<Component*>(new T());
-        component -> attached = components;
+        std::cout << "constructing component:" << typeid(T).name() << std::endl;
+        component = dynamic_cast<Component*>(new T((void*)this));
+        std::cout << "created component component:" << typeid(T).name() << std::endl;
         components.push_back(component);
         return dynamic_cast<T*>(component);
     }
@@ -63,9 +66,15 @@ public:
         throw std::runtime_error(msg.str());
     }
 
-    void update(Time* time, std::vector<Component*> all, InputManager* input);
-    Entity(std::string name);
+    void update(Time* time, InputManager* input);
+
+    void* gamePtr();
+
+    Entity(std::string name, void* game_ptr);
+
     ~Entity();
+private:
+    void* game_ptr;
 };
 
 #endif

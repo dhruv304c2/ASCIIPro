@@ -2,12 +2,12 @@
 #define ASCIIGRAPHICS_H
 
 #include <vector>
-#include "../ECS/Component.h"
+#include "ECS/Component.h"
 #include "Transform.h"
 
-class ASCIIGraphic : public Component{
+class ASCIIGraphic : public Component {
 public:
-    ASCIIGraphic();
+    ASCIIGraphic(void* ent_ptr);
     ~ASCIIGraphic();
     Vector2D<int> center = Vector2D<int>(0,0);
     int width();

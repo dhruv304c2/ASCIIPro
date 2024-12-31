@@ -1,9 +1,10 @@
 #include "Components/ASCIIGraphic.h"
+#include "ECS/Component.h"
 #include <iostream>
 #include <ostream>
 #include <vector>
 
-ASCIIGraphic::ASCIIGraphic() {}
+ASCIIGraphic::ASCIIGraphic(void* ent_ptr) : Component(ent_ptr) {}
 ASCIIGraphic::~ASCIIGraphic() {}
 
 int ASCIIGraphic::width(){

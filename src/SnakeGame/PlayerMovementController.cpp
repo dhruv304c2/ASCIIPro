@@ -1,11 +1,11 @@
 #include "SnakeGame/PlayerMovementController.h"
+#include "ECS/Component.h"
 
-PlayerMovementController::PlayerMovementController() {}
+PlayerMovementController::PlayerMovementController(void* ent_ptr) : Component(ent_ptr) {}
 
 PlayerMovementController::~PlayerMovementController() {}
 
-void PlayerMovementController::update(Time* time, 
-    std::vector<Component*> all,
+void PlayerMovementController::update(Time* time,
     InputManager* input){
 
     handleInputs(input);

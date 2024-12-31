@@ -27,7 +27,7 @@ std::vector<Component*> Game::allComponents() {
 }
 
 Entity* Game::createEntity(std::string name){
-    Entity* ent = new Entity(name);
+    Entity* ent = new Entity(name, (void*)this);
     entities.push_back(ent);
     return ent;
 }
@@ -36,7 +36,7 @@ void Game::run(){
     while(true){
 	input -> getKeys();
 	for(auto e : entities){
-	    e ->update(time, allComponents(), input);
+	    e ->update(time, input);
 	}
 	time ->waitDelta();
     }

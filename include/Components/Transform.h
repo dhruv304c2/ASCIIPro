@@ -43,7 +43,7 @@ class Vector2D{
 
 class Transform : public Component{
 public:
-    Transform();
+    Transform(void* ent_ptr);
     ~Transform();
     Vector2D<float> position;
 };

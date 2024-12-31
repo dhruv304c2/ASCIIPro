@@ -3,18 +3,17 @@
 
 #include "../ECS/Component.h"
 #include "../Components/Transform.h"
-#include <vector>
 
 class PlayerMovementController : public Component{
 public:
-    PlayerMovementController();
+    PlayerMovementController(void* ent_ptr);
     ~PlayerMovementController();
     int worldMinX = 0;
     int worldMaxX = 99;
     int worldMinY = 0;
     int worldMaxY = 49;
     Vector2D<float> speed = Vector2D<float>(1,0);
-    void update(Time* time, std::vector<Component*> all, InputManager* input) override;
+    void update(Time* time, InputManager* input) override;
 private:
     void wrapPos();
     void handleInputs(InputManager* input);

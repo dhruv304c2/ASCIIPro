@@ -29,7 +29,7 @@ protected:
 
 class Animator : public Component {
 public:
-    Animator();
+    Animator(void* ent_ptr);
     ~Animator();
     void playClip(Clip* clip);
 protected:
