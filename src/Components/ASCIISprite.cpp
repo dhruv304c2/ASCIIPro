@@ -1,7 +1,8 @@
 #include "Components/ASCIISprite.h"
+#include "Components/ASCIIGraphic.h"
 #include <vector>
 
-ASCIISprite::ASCIISprite() {}
+ASCIISprite::ASCIISprite(void* ent_ptr) : ASCIIGraphic(ent_ptr) {}
 
 ASCIISprite::~ASCIISprite() {}
 

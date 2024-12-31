@@ -4,13 +4,12 @@
 #include "../ECS/Component.h"
 #include "ASCIIGraphic.h"
 #include "Transform.h"
-#include <vector>
 
 class Canvas : public Component {
 public:
-    Canvas();
+    Canvas(void* ent_ptr);
     ~Canvas();
-    void update(Time *time, std::vector<Component*> all, InputManager* input) override;
+    void update() override;
 private:
     Vector2D<int> clipPoint(Vector2D<int> point);
     void drawASCII(ASCIIGraphic& graphics);

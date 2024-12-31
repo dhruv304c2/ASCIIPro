@@ -5,9 +5,9 @@
 #include "../Core/Sprite/SpriteExport.h"
 #include <vector>
 
-class ASCIISprite : public ASCIIGraphic{
+class ASCIISprite : public ASCIIGraphic {
 public:
-    ASCIISprite();
+    ASCIISprite(void* ent_ptr);
     ~ASCIISprite();
     void useExport(SpriteExport &exported);
     std::vector<std::vector<wchar_t>> sprite();

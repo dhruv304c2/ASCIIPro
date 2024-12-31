@@ -19,7 +19,7 @@ std::string wstringToUtf8(const std::wstring& wideContent) {
     return utf8Content;
 }
 
-Canvas::Canvas() : Component() {
+Canvas::Canvas(void* ent_ptr) : Component(ent_ptr) {
     std::cout<<"Initializing canvas..." << std::endl;
     clearCanvas();
     setvbuf(stdout, nullptr, _IONBF, 0);
@@ -50,18 +50,14 @@ void clearScreen() {
 #endif
 }
 
-void Canvas::update(Time* time, std::vector<Component*> all, InputManager* input) {
-    //std::cout << "Rendering" << std::endl;
-;
+void Canvas::update() {
     clearScreen();
     clearCanvas();
 
     std::wstring wall = L"#";
 
-    for(auto comp : all){
-	if (auto graphic = dynamic_cast<ASCIIGraphic*>(comp)){
+    for(auto graphic : all<ASCIIGraphic>()){
 	    drawASCII(*graphic);
-	}
     }
 
     std::wstring border = wall;
@@ -108,11 +104,11 @@ void Canvas::drawASCII(ASCIIGraphic& graphics){
     Vector2D<int> size = Vector2D<int>(graphics.width(), graphics.height());
     Vector2D<int> bottomRight = clipPoint(pos + size - graphics.center);
 
-    std::cout << "top left: " <<topLeft.toString() << std::endl;
-    std::cout << "bottom right: " << bottomRight.toString() << std::endl;
-    std::cout << "graphic pos: " << pos.toString() << std::endl;
-    std::cout << "graphic center: " << graphics.center.toString() << std::endl;
-    std::cout << "size: " << size.toString() << std::endl; 
+    // std::cout << "top left: " <<topLeft.toString() << std::endl;
+    // std::cout << "bottom right: " << bottomRight.toString() << std::endl;
+    // std::cout << "graphic pos: " << pos.toString() << std::endl;
+    // std::cout << "graphic center: " << graphics.center.toString() << std::endl;
+    // std::cout << "size: " << size.toString() << std::endl; 
     // graphics.debugPrint();
 
     for(int i = topLeft.y; i < bottomRight.y; i++){
