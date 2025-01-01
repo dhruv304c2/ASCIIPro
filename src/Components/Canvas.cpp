@@ -54,33 +54,37 @@ void Canvas::update() {
     clearScreen();
     clearCanvas();
 
-    std::wstring wall = L"#";
+    std::wstring vert = L"┃";
+    std::wstring horz = L"━"; 
+    std::wstring top_left = L"┏";
+    std::wstring top_right = L"┓";
+    std::wstring bottom_left = L"┗";
+    std::wstring bottom_right = L"┛";
 
     for(auto graphic : all<ASCIIGraphic>()){
 	    drawASCII(*graphic);
     }
 
-    std::wstring border = wall;
-    for(int i =0; i <= MAX_X; i++) border += wall;
-    border += wall;
+    std::wstring border;
+    for(int i =0; i <= MAX_X; i++) border += horz;
 
     std::wstring frame_buffer;
 
     //add top border to the canvas
-    frame_buffer += L"\n"  + border + L"\n";
+    frame_buffer += L"\n" + top_left + border + top_right + L"\n";
 
     //Draw canvas lines with left and right borders
     for(int i=0; i<= MAX_Y; i++){
-	frame_buffer += wall;
+	frame_buffer += vert;
 	for(int j=0; j <= MAX_X; j++){ 
 	    frame_buffer += canvas[i][j];
 	}
-	frame_buffer += wall;
+	frame_buffer += vert;
 	frame_buffer += L"\n";
     }
 
     //draw bottom border
-    frame_buffer += border + L"\n";
+    frame_buffer += bottom_left + border + bottom_right + L"\n";
     std::string utf8_frame_buffer = wstringToUtf8(frame_buffer);
     std::cout << utf8_frame_buffer; 
 }
