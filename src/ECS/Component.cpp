@@ -1,5 +1,6 @@
 #include "ECS/Component.h"
 #include "Core/Game.h"
+#include "Core/Input/InputManager.h"
 #include "ECS/Entity.h"
 #include <cassert>
 #include <vector>
@@ -11,8 +12,6 @@ Component::Component(void* ent_ptr){
 }
 
 Component::~Component() {}
-
-void Component::update(Time& time, InputManager* input){};
 
 void Component::update(Time& time){};
 
@@ -37,6 +36,13 @@ std::vector<Component*> Component::all(){
     assert(static_cast<Entity*>(game_ptr));
     auto game = static_cast<Game*>(game_ptr);
     return game -> allComponents();
+}
+
+InputManager* Component::input(){
+    assert(game_ptr != nullptr);
+    assert(static_cast<Entity*>(game_ptr));
+    auto game = static_cast<Game*>(game_ptr);
+    return game -> input();
 }
 
 void Component::attachToEnt(void* ent_ptr){

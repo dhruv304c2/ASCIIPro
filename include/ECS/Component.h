@@ -19,8 +19,6 @@ public:
 
     virtual ~Component();
 
-    virtual void update(Time& time , InputManager* input);
-
     virtual void update(Time& time);
 
     virtual void update();
@@ -50,6 +48,8 @@ protected:
     void* entity_ptr;
 
     void* game_ptr;
+
+    InputManager* input();
 
     std::vector<Component*> attached();
 

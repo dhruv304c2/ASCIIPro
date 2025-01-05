@@ -5,10 +5,9 @@ PlayerMovementController::PlayerMovementController(void* ent_ptr) : Component(en
 
 PlayerMovementController::~PlayerMovementController() {}
 
-void PlayerMovementController::update(Time& time,
-    InputManager* input){
+void PlayerMovementController::update(Time& time){
 
-    handleInputs(input);
+    handleInputs(input());
     Transform* transform = getAttached<Transform>();
     Vector2D<float> movement = dir * speed * time.delta();
     transform->position = transform -> position + movement;

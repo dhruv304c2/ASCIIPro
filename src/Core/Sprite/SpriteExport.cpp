@@ -2,12 +2,11 @@
 #include "unicode/stringpiece.h"
 #include <fstream>
 #include <iostream>
-#include <ostream>
 #include <stdexcept>
 #include <string>
 #include <unicode/unistr.h>
 
-SpriteExport::SpriteExport(std::string path) {
+SpriteExport::SpriteExport(std::string const& path) {
     slicing = nullptr;
     usePath(path);
     readRaw();
@@ -22,12 +21,12 @@ SpriteExport SpriteExport::asUnsliced(){
     return copy;
 }
 
-void SpriteExport::usePath(std::string path) {
+void SpriteExport::usePath(std::string const& path) {
     this->path = std::move(path);
 }
 
-void SpriteExport::useSlicing(Slicing slicing) {
-    this -> slicing = std::move(&slicing);
+void SpriteExport::useSlicing(Slicing& slicing) {
+    this -> slicing = &slicing;
 }
 
 void SpriteExport::readRaw() {

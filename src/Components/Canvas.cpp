@@ -19,26 +19,6 @@ std::string wstringToUtf8(const std::wstring& wideContent) {
     return utf8Content;
 }
 
-Canvas::Canvas(void* ent_ptr) : Component(ent_ptr) {
-    std::cout<<"Initializing canvas..." << std::endl;
-    clearCanvas();
-    setvbuf(stdout, nullptr, _IONBF, 0);
-    #ifdef _WIN32
-    SetConsoleOutputCP(CP_UTF8);
-    #endif
-}
-
-Canvas::~Canvas() {}
-
-void Canvas::clearCanvas(){
-    for(int i=0; i <= MAX_Y; i++){
-	for (int j=0; j <= MAX_X; j++) {
-	    canvas[i][j] = L' '; 	
-	}
-    }
-}
-
-
 void clearScreen() {
 #ifdef _WIN32
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -49,7 +29,65 @@ void clearScreen() {
 #endif
 }
 
+Canvas::Canvas(void* ent_ptr) : Component(ent_ptr) {
+    std::cout<<"Initializing canvas..." << std::endl;
+    resize(_width,_height);
+    clearCanvas();
+    setvbuf(stdout, nullptr, _IONBF, 0);
+    #ifdef _WIN32
+    SetConsoleOutputCP(CP_UTF8);
+    #endif
+}
+
+Canvas::~Canvas() {}
+
+void Canvas::clearCanvas(){
+    for(int i=0; i < height(); i++){
+	for (int j=0; j < width(); j++) {
+	    canvas[i][j] = L' '; 	
+	}
+    }
+}
+
+void Canvas::resize(int const& width, int const& height){
+    this -> _width = width;
+    this -> _height = height;
+
+    canvas = new wchar_t*[height];
+    for (size_t i = 0; i < height; ++i) {
+        canvas[i] = new wchar_t[width];
+    }
+}
+
+int Canvas::width(){
+#ifdef _WIN32
+        CONSOLE_SCREEN_BUFFER_INFO csbi;
+        if (GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi)) {
+            int terminalWidth = csbi.srWindow.Right - csbi.srWindow.Left + 1;
+            return std::min(_width, terminalWidth-2); //padding helps
+        }
+#endif
+	// Fallback if not on Windows or an error occurs
+        return _width; 
+}
+
+int Canvas::height(){
+#ifdef _WIN32
+        CONSOLE_SCREEN_BUFFER_INFO csbi;
+        if (GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi)) {
+            int terminalHeight = csbi.srWindow.Bottom - csbi.srWindow.Top + 1;
+            return std::min(_height, terminalHeight-2); //padding helps
+        }
+#endif
+	// Fallback if not on Windows or an error occurs
+        return _height; 
+}
+
 void Canvas::update() {
+    if(_prev_rend_width != width() || _prev_rend_height != height()){
+	system("cls");
+    }
+
     clearCanvas();
 
     std::wstring vert = L"┃";
@@ -64,7 +102,7 @@ void Canvas::update() {
     }
 
     std::wstring border;
-    for(int i =0; i <= MAX_X; i++) border += horz;
+    for(int i =0; i < width(); i++) border += horz;
 
     std::wstring frame_buffer;
 
@@ -72,9 +110,9 @@ void Canvas::update() {
     frame_buffer += L"\n" + top_left + border + top_right + L"\n";
 
     //Draw canvas lines with left and right borders
-    for(int i=0; i<= MAX_Y; i++){
+    for(int i=0; i< height(); i++){
 	frame_buffer += vert;
-	for(int j=0; j <= MAX_X; j++){ 
+	for(int j=0; j < width(); j++){ 
 	    frame_buffer += canvas[i][j];
 	}
 	frame_buffer += vert;
@@ -87,13 +125,16 @@ void Canvas::update() {
 
     clearScreen();
     std::cout << utf8_frame_buffer; 
+
+    _prev_rend_width = width();
+    _prev_rend_height = height();
 }
 
 Vector2D<int> Canvas::clipPoint(Vector2D<int> point){
-    int x = std::min(point.x,MAX_X);
+    int x = std::min(point.x,width()-1);
     x = std::max(x,0);
 
-    int y = std::min(point.y,MAX_Y);
+    int y = std::min(point.y,height()-1);
     y = std::max(y,0);
 
     return Vector2D<int>(x,y);

@@ -20,9 +20,9 @@ struct Slicing{
 
 class SpriteExport {
 public:
-    SpriteExport(std::string path);
+    SpriteExport(std::string const& path);
     ~SpriteExport();
-    void useSlicing(Slicing slicing);
+    void useSlicing(Slicing & slicing);
     SpriteExport asUnsliced();
     std::vector<std::vector<std::vector<wchar_t>>> sliced();
     std::vector<std::vector<wchar_t>> rawImage();
@@ -32,7 +32,7 @@ private:
     std::vector<std::vector<wchar_t>> raw;
     std::vector<std::vector<std::vector<wchar_t>>> sliced_arr;
 
-    void usePath(std::string path);
+    void usePath(std::string const& path);
     void readRaw();
     void slice();
 };

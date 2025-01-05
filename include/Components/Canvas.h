@@ -9,14 +9,19 @@ class Canvas : public Component {
 public:
     Canvas(void* ent_ptr);
     ~Canvas();
+    void resize(int const& width, int const& height);
     void update() override;
 private:
     Vector2D<int> clipPoint(Vector2D<int> point);
     void drawASCII(ASCIIGraphic& graphics);
     void clearCanvas();
-    wchar_t canvas[50][100];
-    const int MAX_X = 99;
-    const int MAX_Y = 49;
+    wchar_t** canvas;
+    int width();
+    int height();
+    int _width = 1000;
+    int _height = 500;
+    int _prev_rend_width;
+    int _prev_rend_height;
 };
 
 #endif

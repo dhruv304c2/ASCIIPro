@@ -24,9 +24,8 @@ int main() {
 
 	auto player_mvt_cmp = sprite -> addComponent<PlayerMovementController>();
 
-	auto player_sprite_exp = SpriteExport("../resources/sprite.txt");
 	auto sprite_cmp = sprite->addComponent<ASCIISprite>();
-	sprite_cmp -> useExport(player_sprite_exp);	
+	sprite_cmp -> useRaw("../resources/sprite.txt");	
 
 	std::thread gameThread([&] {game -> run();});	
 	gameThread.join();

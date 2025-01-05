@@ -5,23 +5,21 @@
 #include <vector>
 
 Game::Game() {
-    game_clock = GameClock();
-    game_clock.recordStartGameTime();
-
-    input = new InputManager();
+    _game_clock = GameClock();
+    _game_clock.recordStartGameTime();
+    _input = InputManager();
 }
 
 Game::~Game() {
-    delete input;
-    for(auto e : entities){
+    for(auto e : _entities){
 	delete e;
     };
-    entities.clear();
+    _entities.clear();
 }
 
 std::vector<Component*> Game::allComponents() {
     std::vector<Component*> all;
-    for(auto e : entities){
+    for(auto e : _entities){
 	all.insert(all.end(),e->components.begin(), e->components.end());
     }
     return all;
@@ -29,19 +27,23 @@ std::vector<Component*> Game::allComponents() {
 
 Entity* Game::createEntity(std::string name){
     Entity* ent = new Entity(name, (void*)this);
-    entities.push_back(ent);
+    _entities.push_back(ent);
     return ent;
+}
+
+InputManager* Game::input(){
+    return &_input;
 }
 
 void Game::run(){
     while(true){
-	input -> getKeys();
-	for(auto e : entities){
-	    auto time = game_clock.time(); 
-	    e ->update(time, input);
+	_input.getKeys();
+	for(auto e : _entities){
+	    auto time = _game_clock.time(); 
+	    e ->update(time);
 	}
 
-	std::cout << "Time delta: " << game_clock.time().delta() << std::endl;
-	game_clock.recordFrame();
+	std::cout << "Time delta: " << _game_clock.time().delta() << std::endl;
+	_game_clock.recordFrame();
     }
 }

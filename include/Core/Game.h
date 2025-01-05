@@ -10,12 +10,13 @@ public:
     Game();
     ~Game();
     Entity* createEntity(std::string name);
+    InputManager* input();
     void run();
     std::vector<Component*> allComponents();
 private:
-    GameClock game_clock;
-    InputManager* input;
-    std::vector<Entity*> entities;
+    GameClock _game_clock;
+    InputManager _input;
+    std::vector<Entity*> _entities;
 };
 
 #endif 

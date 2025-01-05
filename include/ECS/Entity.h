@@ -6,7 +6,6 @@
 #include <algorithm>
 #include <sstream>
 #include <stdexcept>
-#include "Core/Input/InputManager.h"
 #include "./Component.h"
 
 class Entity {
@@ -62,7 +61,7 @@ public:
         throw std::runtime_error(msg.str());
     }
 
-    void update(Time& time, InputManager* input);
+    void update(Time& time);
 
     void* gamePtr();
 
