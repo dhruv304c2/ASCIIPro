@@ -19,9 +19,9 @@ public:
 
     virtual ~Component();
 
-    virtual void update(Time *time , InputManager* input);
+    virtual void update(Time& time , InputManager* input);
 
-    virtual void update(Time *time);
+    virtual void update(Time& time);
 
     virtual void update();
 

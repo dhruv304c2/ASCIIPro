@@ -12,9 +12,9 @@ Component::Component(void* ent_ptr){
 
 Component::~Component() {}
 
-void Component::update(Time* time, InputManager* input){};
+void Component::update(Time& time, InputManager* input){};
 
-void Component::update(Time* time){};
+void Component::update(Time& time){};
 
 void Component::update(){};
 

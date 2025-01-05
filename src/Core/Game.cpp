@@ -1,16 +1,17 @@
 #include "Core/Input/InputManager.h"
 #include "Core/Game.h"
+#include <iostream>
 #include <string>
 #include <vector>
 
-Game::Game(float delta) {
-    time = new Time();
-    time ->setDelta(delta);
+Game::Game() {
+    game_clock = GameClock();
+    game_clock.recordStartGameTime();
+
     input = new InputManager();
 }
 
 Game::~Game() {
-    delete time;
     delete input;
     for(auto e : entities){
 	delete e;
@@ -36,8 +37,11 @@ void Game::run(){
     while(true){
 	input -> getKeys();
 	for(auto e : entities){
+	    auto time = game_clock.time(); 
 	    e ->update(time, input);
 	}
-	time ->waitDelta();
+
+	std::cout << "Time delta: " << game_clock.time().delta() << std::endl;
+	game_clock.recordFrame();
     }
 }

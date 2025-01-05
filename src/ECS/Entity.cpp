@@ -17,7 +17,7 @@ Entity::Entity(std::string name, void* game_ptr) {
     transform -> position = Vector2D<float>(0,0);
 }
 
-void Entity::update(Time* time, InputManager* input){
+void Entity::update(Time& time, InputManager* input){
     for(auto c: components){
         c ->update(time, input);
         c ->update(time);

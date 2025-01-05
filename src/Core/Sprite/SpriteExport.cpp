@@ -31,7 +31,6 @@ void SpriteExport::useSlicing(Slicing slicing) {
 }
 
 void SpriteExport::readRaw() {
-    std::cout << "reading raw sprite" << std::endl;
     if (path.empty()) {
         throw std::runtime_error("Path is not set.");
     }
@@ -45,9 +44,7 @@ void SpriteExport::readRaw() {
 
     std::string line;
     while (std::getline(file, line)) {
-        std::cout<< "raw: " << line << std::endl;
         icu::UnicodeString unicodeLine = icu::UnicodeString::fromUTF8(icu::StringPiece(line.c_str()));
-        std::cout << "length: " << unicodeLine.length() << std::endl;
         std::wstring wideLine(unicodeLine.getBuffer(), unicodeLine.getBuffer() + unicodeLine.length());
         if(wideLine.size() <= 1) continue;
         std::vector<wchar_t> row(wideLine.begin(), wideLine.end() - 1);

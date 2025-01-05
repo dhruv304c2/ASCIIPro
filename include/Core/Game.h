@@ -7,13 +7,13 @@
 
 class Game {
 public:
-    Game(float delta);
+    Game();
     ~Game();
     Entity* createEntity(std::string name);
     void run();
     std::vector<Component*> allComponents();
 private:
-    Time* time;
+    GameClock game_clock;
     InputManager* input;
     std::vector<Entity*> entities;
 };

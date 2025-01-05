@@ -12,8 +12,9 @@ public:
     int worldMaxX = 99;
     int worldMinY = 0;
     int worldMaxY = 49;
-    Vector2D<float> speed = Vector2D<float>(1,0);
-    void update(Time* time, InputManager* input) override;
+    float speed = 10;
+    Vector2D<float> dir = Vector2D<float>(1,0);
+    void update(Time& time, InputManager* input) override;
 private:
     void wrapPos();
     void handleInputs(InputManager* input);

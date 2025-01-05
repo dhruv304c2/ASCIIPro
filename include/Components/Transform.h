@@ -2,6 +2,7 @@
 #define TRANSFORM_H
 
 #include "../ECS/Component.h"
+#include <cmath>
 #include <string>
 #include <sstream>
 
@@ -10,21 +11,39 @@ class Vector2D{
     public:
         T x;
         T y;
-        Vector2D(T x = 0, T y = 0){
+        Vector2D<T>(T x = 0, T y = 0){
             this -> x = x;
             this -> y = y;
         }
 
-        Vector2D operator+(Vector2D const& p){
-            int x = p.x + this -> x;
-            int y = p.y + this -> y;
-            return Vector2D(x,y);
+        T magnitude(){
+            return std::sqrt(x*x + y*y);
         }
 
-        Vector2D operator-(Vector2D const& p){
-            int x = this -> x - p.x;
-            int y = this -> y - p.y;
-            return Vector2D(x,y);
+        Vector2D<T> normalize(){
+            auto mag = magnitude();
+            if(mag == 0) return this;
+            T x = this -> x / mag;
+            T y = this -> y / mag;
+            return Vector2D<T>(x,y);
+        }
+
+        Vector2D<T> operator+(Vector2D<T> const& p){
+            T x = p.x + this -> x;
+            T y = p.y + this -> y;
+            return Vector2D<T>(x,y);
+        }
+
+        Vector2D<T> operator-(Vector2D<T> const& p){
+            T x = this -> x - p.x;
+            T y = this -> y - p.y;
+            return Vector2D<T>(x,y);
+        }
+
+        Vector2D<T> operator*(T const& mult){
+            T x = this -> x * mult;
+            T y = this -> y * mult;
+            return Vector2D<T>(x,y);
         }
 
         template<typename TCast>

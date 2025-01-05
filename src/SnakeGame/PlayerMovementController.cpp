@@ -5,36 +5,36 @@ PlayerMovementController::PlayerMovementController(void* ent_ptr) : Component(en
 
 PlayerMovementController::~PlayerMovementController() {}
 
-void PlayerMovementController::update(Time* time,
+void PlayerMovementController::update(Time& time,
     InputManager* input){
 
     handleInputs(input);
     Transform* transform = getAttached<Transform>();
-    transform->position = transform -> position + speed;
+    Vector2D<float> movement = dir * speed * time.delta();
+    transform->position = transform -> position + movement;
     wrapPos();
 }
 
 void PlayerMovementController::handleInputs(InputManager* input){
     if(input -> isKeyDown(W)){
-	speed = Vector2D<float>(0,-1);
+	dir = Vector2D<float>(0,-1);
     }
     if(input -> isKeyDown(S)){
-	speed = Vector2D<float>(0,1);
+	dir = Vector2D<float>(0,1);
     }
     if(input -> isKeyDown(A)){
-	speed = Vector2D<float>(-1,0);
+	dir = Vector2D<float>(-1,0);
     }
     if(input -> isKeyDown(D)){
-	speed = Vector2D<float>(1,0);
+	dir = Vector2D<float>(1,0);
     }
 }
 
 void PlayerMovementController::wrapPos(){
     Transform* transform = getAttached<Transform>();
     Vector2D<float> pos = transform -> position;
-    Vector2D<int> posInt = static_cast<Vector2D<int>>(pos);
-    int x = posInt.x;
-    int y = posInt.y;
+    float x = pos.x;
+    float y = pos.y;
     if(x > worldMaxX){
 	x = worldMinX;
     }
@@ -47,6 +47,6 @@ void PlayerMovementController::wrapPos(){
     if(y < worldMinY){
 	y = worldMaxY;
     }
-    transform -> position = Vector2D<float>((float)x,(float)y);
+    transform -> position = Vector2D<float>(x,y);
 }
 

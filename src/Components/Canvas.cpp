@@ -40,7 +40,6 @@ void Canvas::clearCanvas(){
 
 
 void clearScreen() {
-    system("cls");
 #ifdef _WIN32
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
     COORD coord = {0, 0};
@@ -51,7 +50,6 @@ void clearScreen() {
 }
 
 void Canvas::update() {
-    clearScreen();
     clearCanvas();
 
     std::wstring vert = L"┃";
@@ -86,6 +84,8 @@ void Canvas::update() {
     //draw bottom border
     frame_buffer += bottom_left + border + bottom_right + L"\n";
     std::string utf8_frame_buffer = wstringToUtf8(frame_buffer);
+
+    clearScreen();
     std::cout << utf8_frame_buffer; 
 }
 

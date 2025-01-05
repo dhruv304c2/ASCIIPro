@@ -1,31 +1,45 @@
 #include "Core/Time.h"
 #include <chrono>
-#include <thread>
 
-Time::Time() {
-    time = 0;
-    delta = 0;
+using namespace std::chrono;
+
+Time::Time(float time, float delta) {
+    _time = time;
+    _delta = delta;
 }
 
-int Time::getTime() {
-    return time;
+Time::~Time() {}
+
+float Time::delta(){
+    return _delta;
 }
 
-int Time::getDelta() {
-    return delta;
+float Time::time(){
+    return  _time;
 }
 
-void Time::setDelta(float delta) {
-    this ->delta = delta; 
+GameClock::GameClock(){};
+
+GameClock::~GameClock(){};
+
+void GameClock::recordStartGameTime(){
+    auto now  = system_clock::now();
+    _game_start_time = now;
+    _frame_start_time = now;
 }
 
-void Time::waitDelta(){
-    auto now = std::chrono::steady_clock().now(); 
-    std::chrono::duration<float> duration(delta); 
-    std::this_thread::sleep_until(now + duration);
-    time += delta;
+void GameClock::recordFrame(){
+    auto now = system_clock::now();
+    duration<float> delta = now - _frame_start_time;
+    if(delta.count() > 0){
+	_frame_start_time = now;
+    }
 }
 
-Time::~Time() {
-}
+Time GameClock::time(){
+    auto now  = system_clock::now();
+    duration<float> delta_min = now - _frame_start_time;
+    duration<float> time = now - _game_start_time;
 
+    return  Time(time.count(), delta_min.count());
+}
