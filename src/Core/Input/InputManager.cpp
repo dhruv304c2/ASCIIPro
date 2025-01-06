@@ -46,8 +46,6 @@ KeyState handleKeyRelease(KeyState current){
     }
 }
 
-
-
 void InputManager::getKeys(){
     int begin = static_cast<int>(Key::None);
     int end = static_cast<int>(Key::End);

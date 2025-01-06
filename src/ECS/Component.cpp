@@ -1,6 +1,7 @@
 #include "ECS/Component.h"
 #include "Core/Game.h"
 #include "Core/Input/InputManager.h"
+#include "Core/Window.h"
 #include "ECS/Entity.h"
 #include <cassert>
 #include <vector>
@@ -25,24 +26,19 @@ bool Component::isAttached(Component* comp){
 }
 
 std::vector<Component*> Component::attached(){
-    assert(entity_ptr != nullptr);
-    assert(static_cast<Entity*>(entity_ptr));
-    auto ent = static_cast<Entity*>(entity_ptr);
-    return ent-> components;
+    return static_cast<Entity*>(entity_ptr) -> components;
 }
 
 std::vector<Component*> Component::all(){
-    assert(game_ptr != nullptr);
-    assert(static_cast<Entity*>(game_ptr));
-    auto game = static_cast<Game*>(game_ptr);
-    return game -> allComponents();
+    return static_cast<Game*>(game_ptr) -> allComponents();
 }
 
 InputManager* Component::input(){
-    assert(game_ptr != nullptr);
-    assert(static_cast<Entity*>(game_ptr));
-    auto game = static_cast<Game*>(game_ptr);
-    return game -> input();
+    return static_cast<Game*>(game_ptr) -> input();
+}
+
+Window* Component::window(){
+    return static_cast<Game*>(game_ptr) -> window();
 }
 
 void Component::attachToEnt(void* ent_ptr){

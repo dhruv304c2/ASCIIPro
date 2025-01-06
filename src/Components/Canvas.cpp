@@ -5,12 +5,13 @@
 #include <ostream>
 #include <string>
 #include <vector>
+#include <algorithm>
+#include <unicode/unistr.h>
+
 #ifdef _WIN32
 #define NOMINMAX
 #include <windows.h>
 #endif
-#include <algorithm>
-#include <unicode/unistr.h>
 
 std::string wstringToUtf8(const std::wstring& wideContent) {
     icu::UnicodeString unicodeStr(reinterpret_cast<const UChar*>(wideContent.data()), wideContent.length());
@@ -19,13 +20,21 @@ std::string wstringToUtf8(const std::wstring& wideContent) {
     return utf8Content;
 }
 
-void clearScreen() {
+void renderFrame(std::string const& frame_buffer){
 #ifdef _WIN32
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-    COORD coord = {0, 0};
-    SetConsoleCursorPosition(hConsole, coord);
+    CONSOLE_SCREEN_BUFFER_INFO csbi;
+    COORD topLeft = {0, 0};
+    DWORD written, consoleSize;
+
+    if (GetConsoleScreenBufferInfo(hConsole, &csbi)) {
+        SetConsoleCursorPosition(hConsole, topLeft);
+    }
+
+    WriteFile(hConsole, frame_buffer.c_str(), frame_buffer.size(), &written, nullptr);
 #else
-    std::wcout << L"\033[H"; // ANSI escape code for cursor home
+    std::wcout << L"\033[H";
+    std::cout << frame_buffer;
 #endif
 }
 
@@ -37,6 +46,8 @@ Canvas::Canvas(void* ent_ptr) : Component(ent_ptr) {
     #ifdef _WIN32
     SetConsoleOutputCP(CP_UTF8);
     #endif
+
+    window()->on_window_resize.addListener([](){system("cls");});
 }
 
 Canvas::~Canvas() {}
@@ -60,34 +71,14 @@ void Canvas::resize(int const& width, int const& height){
 }
 
 int Canvas::width(){
-#ifdef _WIN32
-        CONSOLE_SCREEN_BUFFER_INFO csbi;
-        if (GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi)) {
-            int terminalWidth = csbi.srWindow.Right - csbi.srWindow.Left + 1;
-            return std::min(_width, terminalWidth-2); //padding helps
-        }
-#endif
-	// Fallback if not on Windows or an error occurs
-        return _width; 
+        return std::min(_width, window()->width());
 }
 
 int Canvas::height(){
-#ifdef _WIN32
-        CONSOLE_SCREEN_BUFFER_INFO csbi;
-        if (GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi)) {
-            int terminalHeight = csbi.srWindow.Bottom - csbi.srWindow.Top + 1;
-            return std::min(_height, terminalHeight-2); //padding helps
-        }
-#endif
-	// Fallback if not on Windows or an error occurs
-        return _height; 
+        return std::min(_height, window()->height());
 }
 
-void Canvas::update() {
-    if(_prev_rend_width != width() || _prev_rend_height != height()){
-	system("cls");
-    }
-
+void Canvas::update() { 
     clearCanvas();
 
     std::wstring vert = L"┃";
@@ -102,9 +93,11 @@ void Canvas::update() {
     }
 
     std::wstring border;
+    border.reserve(width());
     for(int i =0; i < width(); i++) border += horz;
 
     std::wstring frame_buffer;
+    frame_buffer.reserve((width() + 2) * (height() + 2));
 
     //add top border to the canvas
     frame_buffer += L"\n" + top_left + border + top_right + L"\n";
@@ -123,11 +116,7 @@ void Canvas::update() {
     frame_buffer += bottom_left + border + bottom_right + L"\n";
     std::string utf8_frame_buffer = wstringToUtf8(frame_buffer);
 
-    clearScreen();
-    std::cout << utf8_frame_buffer; 
-
-    _prev_rend_width = width();
-    _prev_rend_height = height();
+    renderFrame(utf8_frame_buffer);
 }
 
 Vector2D<int> Canvas::clipPoint(Vector2D<int> point){

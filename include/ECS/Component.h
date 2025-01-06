@@ -3,6 +3,7 @@
 
 #include "Core/Time.h"
 #include "Core/Input/InputManager.h"
+#include "Core/Window.h"
 #include <sstream>
 #include <stdexcept>
 #include <vector>
@@ -50,6 +51,8 @@ protected:
     void* game_ptr;
 
     InputManager* input();
+
+    Window* window();
 
     std::vector<Component*> attached();
 

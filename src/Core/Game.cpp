@@ -1,6 +1,5 @@
 #include "Core/Input/InputManager.h"
 #include "Core/Game.h"
-#include <iostream>
 #include <string>
 #include <vector>
 
@@ -8,6 +7,7 @@ Game::Game() {
     _game_clock = GameClock();
     _game_clock.recordStartGameTime();
     _input = InputManager();
+    _window = Window();
 }
 
 Game::~Game() {
@@ -35,15 +35,17 @@ InputManager* Game::input(){
     return &_input;
 }
 
+Window* Game::window(){
+    return &_window;
+}
+
 void Game::run(){
     while(true){
-	_input.getKeys();
 	for(auto e : _entities){
 	    auto time = _game_clock.time(); 
 	    e ->update(time);
 	}
-
-	std::cout << "Time delta: " << _game_clock.time().delta() << std::endl;
+	_input.getKeys();
 	_game_clock.recordFrame();
     }
 }

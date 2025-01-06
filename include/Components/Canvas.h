@@ -20,8 +20,6 @@ private:
     int height();
     int _width = 1000;
     int _height = 500;
-    int _prev_rend_width;
-    int _prev_rend_height;
 };
 
 #endif
