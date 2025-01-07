@@ -9,10 +9,13 @@ class Canvas : public Component {
 public:
     Canvas(void* ent_ptr);
     ~Canvas();
-    void resize(int const& width, int const& height);
+    void resizeCanvas(int const& width, int const& height);
+    void start() override;
     void update() override;
 private:
-    Vector2D<int> clipPoint(Vector2D<int> point);
+    Vector2D<int> clipPoint(Vector2D<int> const& point, 
+            int const& canvas_width, 
+            int const& canvas_height);
     void drawASCII(ASCIIGraphic& graphics);
     void clearCanvas();
     wchar_t** canvas;

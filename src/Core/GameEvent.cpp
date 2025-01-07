@@ -10,7 +10,10 @@ void GameEvent::addListener(Listener listener) {
 }
 
 void GameEvent::removeListener(Listener listener) {
-    auto it = std::find(listeners.begin(), listeners.end(), listener);
+    auto it = std::find_if(listeners.begin(), listeners.end(), [&listener](Listener const& l) {
+        return &l == &listener;
+    });
+
     if (it != listeners.end()) {
         listeners.erase(it);
     }

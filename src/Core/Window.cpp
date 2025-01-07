@@ -11,10 +11,14 @@ Window::Window() {}
 Window::~Window() {}
 
 void Window::update(){
-    INPUT_RECORD input_record;
-    if(input_record.EventType == WINDOW_BUFFER_SIZE_EVENT){
-	on_window_resize.trigger();
+    int curr_width = width();
+    int curr_height = height();
+    if(_prev_width != curr_width || _prev_height != curr_height){
+       on_window_resize.trigger();
     }
+
+    _prev_width = curr_width;
+    _prev_height = curr_height;
 }
 
 int Window::width(){

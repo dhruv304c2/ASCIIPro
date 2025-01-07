@@ -1,6 +1,6 @@
 #include "Components/Canvas.h"
 #include "Components/Transform.h"
-#include <cstdlib>
+#include <cassert>
 #include <iostream>
 #include <ostream>
 #include <string>
@@ -20,34 +20,40 @@ std::string wstringToUtf8(const std::wstring& wideContent) {
     return utf8Content;
 }
 
-void renderFrame(std::string const& frame_buffer){
+void writeToConsole(const std::wstring& frame_buffer, int const& width, int const& height) {
 #ifdef _WIN32
-    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-    CONSOLE_SCREEN_BUFFER_INFO csbi;
-    COORD topLeft = {0, 0};
-    DWORD written, consoleSize;
+    static HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 
-    if (GetConsoleScreenBufferInfo(hConsole, &csbi)) {
-        SetConsoleCursorPosition(hConsole, topLeft);
-    }
+    COORD bufferSize = {static_cast<SHORT>(width), static_cast<SHORT>(height)};
+    SetConsoleScreenBufferSize(hConsole, bufferSize);
 
-    WriteFile(hConsole, frame_buffer.c_str(), frame_buffer.size(), &written, nullptr);
+    DWORD written = 0;
+    COORD cursorPos = {0, 0};
+    SetConsoleCursorPosition(hConsole, cursorPos);
+
+    WriteConsoleW(hConsole, frame_buffer.c_str(), static_cast<DWORD>(frame_buffer.size()), &written, NULL);
 #else
-    std::wcout << L"\033[H";
-    std::cout << frame_buffer;
+    std::wcout << L"\033[H"; // ANSI escape to reset cursor to top-left
+    std::wcout << frame_buffer;
 #endif
 }
 
-Canvas::Canvas(void* ent_ptr) : Component(ent_ptr) {
+Canvas::Canvas(void* ent_ptr) : Component(ent_ptr) {}
+
+void Canvas::start(){
     std::cout<<"Initializing canvas..." << std::endl;
-    resize(_width,_height);
+    resizeCanvas(window() -> width(), window() -> height());
     clearCanvas();
     setvbuf(stdout, nullptr, _IONBF, 0);
-    #ifdef _WIN32
+#ifdef _WIN32
     SetConsoleOutputCP(CP_UTF8);
-    #endif
+#endif
 
-    window()->on_window_resize.addListener([](){system("cls");});
+    window()->on_window_resize.addListener([this](){
+	system("cls");
+	this -> resizeCanvas(window() -> width(), window() -> height());
+	static_assert(true, "window resized");
+    });
 }
 
 Canvas::~Canvas() {}
@@ -55,12 +61,12 @@ Canvas::~Canvas() {}
 void Canvas::clearCanvas(){
     for(int i=0; i < height(); i++){
 	for (int j=0; j < width(); j++) {
-	    canvas[i][j] = L' '; 	
+	    canvas[i][j] = L' ';	
 	}
     }
 }
 
-void Canvas::resize(int const& width, int const& height){
+void Canvas::resizeCanvas(int const& width, int const& height){
     this -> _width = width;
     this -> _height = height;
 
@@ -71,11 +77,11 @@ void Canvas::resize(int const& width, int const& height){
 }
 
 int Canvas::width(){
-        return std::min(_width, window()->width());
+    return _width;
 }
 
 int Canvas::height(){
-        return std::min(_height, window()->height());
+    return _height;
 }
 
 void Canvas::update() { 
@@ -97,10 +103,10 @@ void Canvas::update() {
     for(int i =0; i < width(); i++) border += horz;
 
     std::wstring frame_buffer;
-    frame_buffer.reserve((width() + 2) * (height() + 2));
+    frame_buffer.reserve((width() + 3) * (height() + 2));
 
     //add top border to the canvas
-    frame_buffer += L"\n" + top_left + border + top_right + L"\n";
+    frame_buffer += top_left + border + top_right + L"\n";
 
     //Draw canvas lines with left and right borders
     for(int i=0; i< height(); i++){
@@ -114,16 +120,14 @@ void Canvas::update() {
 
     //draw bottom border
     frame_buffer += bottom_left + border + bottom_right + L"\n";
-    std::string utf8_frame_buffer = wstringToUtf8(frame_buffer);
-
-    renderFrame(utf8_frame_buffer);
+    writeToConsole(frame_buffer, width() + 3, height() + 2);
 }
 
-Vector2D<int> Canvas::clipPoint(Vector2D<int> point){
-    int x = std::min(point.x,width()-1);
+Vector2D<int> Canvas::clipPoint(Vector2D<int> const& point,int const& canvas_width, int const& canvas_height){
+    int x = std::min(point.x,canvas_width - 1);
     x = std::max(x,0);
 
-    int y = std::min(point.y,height()-1);
+    int y = std::min(point.y,canvas_height-1);
     y = std::max(y,0);
 
     return Vector2D<int>(x,y);
@@ -134,9 +138,9 @@ void Canvas::drawASCII(ASCIIGraphic& graphics){
     auto pos = transfom -> position;
     auto mat = graphics.pixelMatrix();
 
-    Vector2D<int> topLeft = clipPoint(pos - graphics.center);
+    Vector2D<int> topLeft = clipPoint(pos - graphics.center, width(), height());
     Vector2D<int> size = Vector2D<int>(graphics.width(), graphics.height());
-    Vector2D<int> bottomRight = clipPoint(pos + size - graphics.center);
+    Vector2D<int> bottomRight = clipPoint(pos + size - graphics.center, width(), height());
 
     // std::cout << "top left: " <<topLeft.toString() << std::endl;
     // std::cout << "bottom right: " << bottomRight.toString() << std::endl;

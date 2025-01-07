@@ -18,6 +18,8 @@ void Component::update(Time& time){};
 
 void Component::update(){};
 
+void Component::start(){};
+
 bool Component::isAttached(Component* comp){
     for(auto c : attached()){
         if(c == comp) return true;

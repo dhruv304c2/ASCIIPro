@@ -40,12 +40,17 @@ Window* Game::window(){
 }
 
 void Game::run(){
+    for(auto const& e : _entities){
+	e -> start();
+    }
+
     while(true){
-	for(auto e : _entities){
+	for(auto const& e : _entities){
 	    auto time = _game_clock.time(); 
 	    e ->update(time);
 	}
 	_input.getKeys();
 	_game_clock.recordFrame();
+	_window.update();
     }
 }

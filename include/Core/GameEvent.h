@@ -1,11 +1,11 @@
 #ifndef GAMEEVENT_H
 #define GAMEEVENT_H
 
+#include <functional>
 #include <vector>
 
-using Listener = void(*)();
-
 class GameEvent {
+using Listener = std::function<void()>;
 public:
     GameEvent();
     ~GameEvent();
@@ -16,5 +16,4 @@ public:
 private:
     std::vector<Listener> listeners;
 };
-
 #endif

@@ -20,6 +20,8 @@ public:
 
     virtual ~Component();
 
+    virtual void start();
+
     virtual void update(Time& time);
 
     virtual void update();

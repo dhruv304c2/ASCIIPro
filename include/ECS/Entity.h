@@ -63,6 +63,8 @@ public:
 
     void update(Time& time);
 
+    void start();
+
     void* gamePtr();
 
     Entity(std::string name, void* game_ptr);
