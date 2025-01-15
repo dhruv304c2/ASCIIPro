@@ -7,7 +7,7 @@ make sure you have
 - g++
 - make
 - cmake
-- ninja
+- ninja (if you use the default build command)
 
 ### Install and compile dependencies
 
