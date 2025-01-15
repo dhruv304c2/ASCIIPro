@@ -5,7 +5,7 @@ BUILD_DIR = build
 GAME_EXECUTABLE = $(BUILD_DIR)/game/target/game
 
 # Default target: Compile and Build
-all: compile build
+all: build
 
 # Compile CMake into the build directory
 compile:

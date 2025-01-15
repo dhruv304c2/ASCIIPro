@@ -34,6 +34,7 @@ void GameClock::recordFrame(){
     if(delta.count() > 0){
 	_frame_start_time = now;
     }
+    on_frame_recorded.trigger();
 }
 
 Time GameClock::time(){

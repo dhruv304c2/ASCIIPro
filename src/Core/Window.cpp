@@ -1,4 +1,6 @@
 #include "Core/Window.h"
+#include "Core/Viewport/Viewport.h"
+#include "Math/Vector2D.h"
 #include <limits>
 
 #ifdef _WIN32
@@ -6,7 +8,9 @@
 #include <windows.h>
 #endif
 
-Window::Window() {}
+Window::Window() {
+    _origin_screen_coord = Vector2D<int>(0,0);
+}
 
 Window::~Window() {}
 
@@ -36,10 +40,13 @@ int Window::height(){
 #ifdef _WIN32
     CONSOLE_SCREEN_BUFFER_INFO csbi;
     if (GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi)) {
-	int terminalWidth = csbi.srWindow.Bottom - csbi.srWindow.Top + 1;
-	return terminalWidth - 5;
+	int terminalHeight = csbi.srWindow.Bottom - (csbi.srWindow.Top + 1);
+	return terminalHeight;
     }
 #endif
     return std::numeric_limits<int>::max();
 }
 
+Vector2D<int> Window::originScreenCoord(){
+    return _origin_screen_coord;
+}

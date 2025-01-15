@@ -1,6 +1,7 @@
 #ifndef COMPONENT_H
 #define COMPONENT_H
 
+#include "Core/Rendering/Renderer.h"
 #include "Core/Time.h"
 #include "Core/Input/InputManager.h"
 #include "Core/Window.h"
@@ -14,28 +15,23 @@ enum ComponentId{
     CANVAS,
 };
 
+class Entity;
+class Game;
+
 class Component {
 public:
     Component(void* ent_ptr);
-
     virtual ~Component();
-
     virtual void start();
-
     virtual void update(Time& time);
-
     virtual void update();
-
     bool isAttached(Component* comp);
-
-
     template <typename T> bool hasAttached(){
         for(auto c : attached()){
             if(dynamic_cast<T*>(c)) return true;
         }
         return false;
     }
-
     template <typename T> T* getAttached(){
         for(auto c : attached()){
             if(auto converted = dynamic_cast<T*>(c)) return converted;
@@ -44,22 +40,14 @@ public:
         oss << "No component with id:" << typeid(T).name() << "attached to the component"; 
         throw std::runtime_error(oss.str());
     }
-
 protected:
     void attachToEnt(void* ent_ptr);
-
     void* entity_ptr;
-
     void* game_ptr;
-
     InputManager* input();
-
-    Window* window();
-
+    ViewportRect window();
     std::vector<Component*> attached();
-
     std::vector<Component*> all();
-
     template<typename T> 
     std::vector<T*> all(){
         auto all = this -> all();

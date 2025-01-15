@@ -34,14 +34,25 @@ void ProfilerRenderer::render(){
 std::wstring ProfilerRenderer::log(){
     float smooth_fps = m_profiler->getProfile().smoothed_fps;
     float average_fps = m_profiler->getProfile().average_fps;
+    float delta = m_profiler->getProfile().delta_s;
+    float time = m_profiler->getProfile().game_duration_s;
     std::wstring log;
     std::wstring smooth_fps_str = std::to_wstring(smooth_fps);
     std::wstring average_fps_str = std::to_wstring(average_fps);
+    std::wstring delta_str = std::to_wstring(delta);
+    std::wstring time_str = std::to_wstring(time);
     log += L"Smooth FPS: ";
     log += smooth_fps_str;
     log += L"\n";
     log += L"Average FPS: ";
     log += average_fps_str;
+    log += L"\n";
+    log += L"Delta: ";
+    log += delta_str;
+    log += L"\n";
+    log += L"Game Duration: ";
+    log += time_str;
+    log += L"\n";
     return log;
 }
 

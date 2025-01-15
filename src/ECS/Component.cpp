@@ -1,6 +1,7 @@
 #include "ECS/Component.h"
 #include "Core/Game.h"
 #include "Core/Input/InputManager.h"
+#include "Core/Rendering/Renderer.h"
 #include "Core/Window.h"
 #include "ECS/Entity.h"
 #include <cassert>
@@ -39,7 +40,7 @@ InputManager* Component::input(){
     return static_cast<Game*>(game_ptr) -> input();
 }
 
-Window* Component::window(){
+ViewportRect Component::window(){
     return static_cast<Game*>(game_ptr) -> window();
 }
 

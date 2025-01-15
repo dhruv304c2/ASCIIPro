@@ -16,8 +16,8 @@ class ViewportManager {
 public:
     ViewportManager(Window* window = nullptr);
     ~ViewportManager();
-    Viewport* splitSelected(ViewportSplit split);
-    Viewport* selected();
+    ViewportNode* splitSelected(ViewportSplit split);
+    ViewportNode* selected();
     void select(ViewportNode* node);
     void render();
     void start();

@@ -12,7 +12,7 @@ public:
     int worldMaxX = 99;
     int worldMinY = 0;
     int worldMaxY = 49;
-    float speed = 10;
+    float speed = 500;
     Vector2D<float> dir = Vector2D<float>(1,0);
     void update(Time& time) override;
 private:

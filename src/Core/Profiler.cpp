@@ -47,6 +47,3 @@ void Profiler::evaluate(){
     m_fps_buffer.push(m_delta_s);
     m_smoothed_fps = calculateSmoothedFps(m_fps_buffer);
 }
-
-
-

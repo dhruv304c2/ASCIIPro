@@ -40,13 +40,17 @@ add_executable(game ${SRC_FILES})
 # target dependencies
 add_dependencies(game resource_copy)
 
+set(FINAL_DIR "${CMAKE_BINARY_DIR}/game")
+
 add_custom_command(
     TARGET game POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/game/bin
-    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:game> ${CMAKE_BINARY_DIR}/game/bin/
+    COMMAND ${CMAKE_COMMAND} -E make_directory ${FINAL_DIR}/bin
+    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:game> ${FINAL_DIR}/bin/
+    COMMENT "Exporting resources...."
 )
 
 #============VENDORS=============================
+## ICU
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
 list(APPEND CMAKE_SYSTEM_PREFIX_PATH 
@@ -62,6 +66,15 @@ if (ICU_FOUND)
         target_link_libraries(game PRIVATE ${ICU_I18N_LIBRARIES})
     endif()
 endif()
+
+#Pack ICU_DLLs
+file(GLOB DLL_FILES "${CMAKE_SOURCE_DIR}/vendor/icu/bin/*.dll")
+
+add_custom_command(
+    TARGET game POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different ${DLL_FILES} "${FINAL_DIR}/bin"
+    COMMENT "Packing dll files with final executable" 
+)
 
 #============VENDORS=============================
 

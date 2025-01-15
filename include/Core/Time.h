@@ -1,6 +1,7 @@
 #ifndef TIME_H
 #define TIME_H
 
+#include "Core/GameEvent.h"
 #include <chrono>
 
 using namespace std::chrono;
@@ -23,6 +24,7 @@ public:
     Time time();
     void recordStartGameTime();
     void recordFrame();
+    GameEvent on_frame_recorded;
 private:
     time_point<system_clock> _game_start_time;
     time_point<system_clock> _frame_start_time;

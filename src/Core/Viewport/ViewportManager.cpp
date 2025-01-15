@@ -59,30 +59,32 @@ void ViewportManager::start(){
 #endif
 }
 
-Viewport* ViewportManager::selected(){
-    return _selected->item;
+ViewportNode* ViewportManager::selected(){
+    return _selected;
 }
 
-Viewport* ViewportManager::splitSelected(ViewportSplit split){
+ViewportNode* ViewportManager::splitSelected(ViewportSplit split){
     auto selected = _selected->item;
     switch (split) {
 	case ViewportSplit::Horizontal: {
 		int old_port_width = selected->width() / 2;
-		int new_port_width = selected->width() - old_port_width - 2;
+		int new_port_width = selected->width() - old_port_width - 1;
 		selected->resize(old_port_width, selected->height());
-		auto origin = selected->origin() + Vector2D<int>(selected->width() + 2 ,0);
+		auto origin = selected->origin() + Vector2D<int>(selected->width() + 1 ,0);
 		auto new_port_horz = new Viewport(new_port_width, selected->height(), origin);
-		_selected->addRight(new ViewportNode(new_port_horz)); //Horizontal ports are added as right node
-		return new_port_horz;
+		auto node = new ViewportNode(new_port_horz);
+		_selected->addRight(node); //Horizontal ports are added as right node
+		return node;
 	}
 	case ViewportSplit::Vertical: {
 		int old_port_height = selected->height()/ 2;
-		int new_port_height = selected->height() - old_port_height - 2;
+		int new_port_height = selected->height() - old_port_height;
 		selected->resize(selected->width(), old_port_height);
-		auto origin = selected->origin() + Vector2D<int>(0,selected->height() + 2);
+		auto origin = selected->origin() + Vector2D<int>(0,selected->height());
 		auto new_port_vert = new Viewport(selected->width(), new_port_height, origin);
-		_selected->addLeft(new ViewportNode(new_port_vert)); //Vertical ports are added as left node
-		return new_port_vert;
+		auto node = new ViewportNode(new_port_vert);
+		_selected->addLeft(node); //Vertical ports are added as left node
+		return node;
 	}
 	default:
 		return nullptr;

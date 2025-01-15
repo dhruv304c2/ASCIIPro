@@ -6,7 +6,6 @@ PlayerMovementController::PlayerMovementController(void* ent_ptr) : Component(en
 PlayerMovementController::~PlayerMovementController() {}
 
 void PlayerMovementController::update(Time& time){
-
     handleInputs(input());
     Transform* transform = getAttached<Transform>();
     Vector2D<float> movement = dir * speed * time.delta();
@@ -34,18 +33,23 @@ void PlayerMovementController::wrapPos(){
     Vector2D<float> pos = transform -> position;
     float x = pos.x;
     float y = pos.y;
-    if(x > worldMaxX){
-	x = worldMinX;
+
+    auto window_width = window().width;
+    auto window_height = window().height;
+
+    if(x > window_width){
+	x = 0;
     }
-    if(x < worldMinX){
-	x = worldMaxX;
+    if(x < 0){
+	x = window_width;
     }
-    if(y > worldMaxY){
-	y = worldMinY;
+    if(y > window_height){
+	y = 0;
     }
-    if(y < worldMinY){
-	y = worldMaxY;
+    if(y < 0){
+	y = window_height;
     }
+
     transform -> position = Vector2D<float>(x,y);
 }
 
