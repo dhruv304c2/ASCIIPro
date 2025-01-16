@@ -56,6 +56,23 @@ public:
         }
     }
 
+    BTreeNode<T>* find(T* item){
+        if(this->item == item) return this;
+        if(left != nullptr){
+            auto left_res = left->find(item);
+            if(left_res != nullptr){
+                return left_res;
+            }
+        }
+        if(right != nullptr){
+            auto right_res = left->find(item);
+            if(right_res != nullptr){
+                return right_res;
+            }
+        }
+        return nullptr;
+    }
+
     void forEach(std::function<void(T*)> action){
         action(item);
         if(left != nullptr) left->forEach(action);
@@ -88,6 +105,10 @@ public:
         delete _root;
     }
 
+    BTreeNode<T>* find(T* item){
+        return _root->find(item);
+    }
+
     BTreeNode<T>* root(){
         return _root;
     }
@@ -109,6 +130,10 @@ public:
 
     }
 
+    void recurse(std::function<void(BTreeNode<T>*)> action){
+        recurse(_root,action);
+    }
+
     void addRightMost(T* item){
         auto node = BTreeNode<T>(item);
         rightMostNode()->addRight(node);
@@ -124,6 +149,12 @@ private:
     void addFirst(T* item){
         auto node = new BTreeNode<T>(item);
         _root = node;
+    }
+    void recurse(BTreeNode<T>* node_ptr, std::function<void(BTreeNode<T>*)> action){
+        if(node_ptr == nullptr) return;
+        action(node_ptr);
+        recurse(node_ptr->left,action);
+        recurse(node_ptr->right,action);
     }
 };
 

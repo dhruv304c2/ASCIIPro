@@ -6,10 +6,6 @@
 #include "Components/ASCIISprite.h"
 #include "SnakeGame/PlayerMovementController.h"
 
-void runGame(Game game){
-	game.run();
-}
-
 int main(int args, char* argv[]) {
 	std::cout << "\033[?25l";
 	std::cout << "starting game.."<< std::endl;
@@ -18,7 +14,7 @@ int main(int args, char* argv[]) {
 	auto arg = arg_parser.parse();	
 
 	if(arg.debug_mode){
-		std::cout << "running in debug mode"  << std::endl;
+	    std::cout << "running in debug mode"  << std::endl;
 	}
 
 	auto game = new Game();

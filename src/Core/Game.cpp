@@ -18,14 +18,17 @@ Game::Game() :
     std::cout << "starting game session..." << std::endl;
     
     //Creating Ports
-    auto game_viewport = _viewport_manager.selected();
-    auto profiler_viewport = _viewport_manager.splitSelected(ViewportSplit::Horizontal);
-    _viewport_manager.select(profiler_viewport);
-    auto log_viewport = _viewport_manager.splitSelected(ViewportSplit::Vertical);
+    auto game_node = _viewport_manager.root();
+    std::cout<< "found root viewport node..." << std::endl;
+    auto profiler_node = _viewport_manager.split(game_node,ViewportSplit::Horizontal,0.7);
+    std::cout<< "profiler viewport created" << std::endl;
+    auto log_viewport = _viewport_manager.split(profiler_node,ViewportSplit::Vertical,0.3);
+
+    std::cout<< "created required viewports..." << std::endl;
 
     //Creating Renderers
-    _game_renderer = new GameRenderer(game_viewport->item, this);
-    _profiler_renderer = new ProfilerRenderer(profiler_viewport->item, this, &_profiler);
+    _game_renderer = new GameRenderer(game_node->item, this);
+    _profiler_renderer = new ProfilerRenderer(profiler_node->item, this, &_profiler);
     _game_clock.recordStartGameTime();
 }
 

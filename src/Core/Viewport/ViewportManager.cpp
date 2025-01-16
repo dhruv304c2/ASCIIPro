@@ -4,6 +4,7 @@
 #include "Core/Window.h"
 #include "Math/Vector2D.h"
 #include <algorithm>
+#include <cassert>
 #include <cstdlib>
 #include <iostream>
 #include <ostream>
@@ -48,6 +49,10 @@ ViewportManager::ViewportManager(Window* window) : _window(window) {
     std::cout << "created viewport width: " << _selected->item->width() << std::endl;
     std::cout << "created viewport height: " << _selected->item->height() << std::endl;
     std::cout << "view port manager created" << std::endl;
+
+    _window->on_window_resize.addListener([&](){
+	this->resize();
+    });
 }
 
 ViewportManager::~ViewportManager() {}
@@ -63,27 +68,68 @@ ViewportNode* ViewportManager::selected(){
     return _selected;
 }
 
-ViewportNode* ViewportManager::splitSelected(ViewportSplit split){
-    auto selected = _selected->item;
-    switch (split) {
+ViewportNode* ViewportManager::root(){
+    return _viewport_tree->root();
+}
+
+void ViewportManager::resize(){
+    system("cls");
+    _viewport_tree->recurse([&](BTreeNode<Viewport>* node) {
+	int height = _window->height() * node->item->vertical_split;
+	int width = _window->width() * node->item->horizontal_split;
+
+	if(node->right) {
+	    node->right->item->setOrigin(node->item->origin() + Vector2D<int>(width+1, 0));
+	}else{
+	    width = _window->width() - node->item->origin().x;
+	}
+	if(node->left) {
+	    node->left->item->setOrigin(node->item->origin() + Vector2D<int>(0, height));
+	}
+	else {	
+	    height = _window->height() - node->item->origin().y;
+	}
+	node->item->resize(width, height);
+    });
+}
+
+ViewportNode* ViewportManager::split(ViewportNode* parent, ViewportSplit split_style, float split){
+    if(split < 0) split = 0;
+    if(split > 1) split = 1;
+ 
+    auto parent_port = parent->item;
+
+    switch (split_style) {
 	case ViewportSplit::Horizontal: {
-		int old_port_width = selected->width() / 2;
-		int new_port_width = selected->width() - old_port_width - 1;
-		selected->resize(old_port_width, selected->height());
-		auto origin = selected->origin() + Vector2D<int>(selected->width() + 1 ,0);
-		auto new_port_horz = new Viewport(new_port_width, selected->height(), origin);
+
+		///////////////////Executing split
+		int old_port_width = parent_port->width() * split;
+		int new_port_width = parent_port->width() - old_port_width - 1;
+		parent_port->resize(old_port_width, parent_port->height());
+		auto origin = parent_port->origin() + Vector2D<int>(parent_port->width() + 1 ,0);
+		auto new_port_horz = new Viewport(new_port_width, parent_port->height(), origin);
 		auto node = new ViewportNode(new_port_horz);
-		_selected->addRight(node); //Horizontal ports are added as right node
+		parent->addRight(node); //Horizontal ports are added as right node
+
+		///////////////////Saving split
+		new_port_horz->horizontal_split = (parent_port->horizontal_split * (1 -split));
+		parent_port->horizontal_split *= split;
 		return node;
 	}
 	case ViewportSplit::Vertical: {
-		int old_port_height = selected->height()/ 2;
-		int new_port_height = selected->height() - old_port_height;
-		selected->resize(selected->width(), old_port_height);
-		auto origin = selected->origin() + Vector2D<int>(0,selected->height());
-		auto new_port_vert = new Viewport(selected->width(), new_port_height, origin);
+		
+		///////////////////Executing split
+		int old_port_height = parent_port->height() * split;
+		int new_port_height = parent_port->height() - old_port_height;
+		parent_port->resize(parent_port->width(), old_port_height);
+		auto origin = parent_port->origin() + Vector2D<int>(0,parent_port->height());
+		auto new_port_vert = new Viewport(parent_port->width(), new_port_height, origin);
 		auto node = new ViewportNode(new_port_vert);
-		_selected->addLeft(node); //Vertical ports are added as left node
+		parent->addLeft(node); //Vertical ports are added as left node
+
+		///////////////////Saving split
+		new_port_vert->vertical_split = (parent_port->vertical_split * (1-split));
+		parent_port->vertical_split *= split;
 		return node;
 	}
 	default:
@@ -124,6 +170,7 @@ void ViewportManager::render(){
     });
 
     std::wstring frame_buffer;
+    frame_buffer += L"\033[32m";
     for(int i=0; i < h; i++){
 	for(int j=0; j < w; j++){
 	    frame_buffer += canvas[i][j];

@@ -33,7 +33,18 @@ void Viewport::clearViewportBuffer(){
 void Viewport::resize(int const& width, int const& height){
     m_width = width;
     m_height = height;
+
+    buffer = new wchar_t*[m_height];
+    for(int i=0; i < m_height; i++){
+	buffer[i] = new wchar_t[m_width];
+	std::fill(buffer[i], buffer[i] + m_width, L' ');
+    }
+
     on_resize.trigger();
+}
+
+void Viewport::setOrigin(Vector2D<int> origin){
+    m_origin = origin;
 }
 
 Vector2D<int> Viewport::origin(){

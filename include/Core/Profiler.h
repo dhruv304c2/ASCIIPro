@@ -13,6 +13,7 @@ public:
     float smoothed_fps;
     float average_fps;
     int frames;
+    int allocations_bits;
 };
 
 class Profiler {

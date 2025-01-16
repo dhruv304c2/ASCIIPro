@@ -3,6 +3,7 @@
 #include "Core/Profiler.h"
 #include "Core/Rendering/Renderer.h"
 #include "Core/Viewport/Viewport.h"
+#include <cstddef>
 #include <string>
 
 ProfilerRenderer::ProfilerRenderer(Viewport* viewport, Game* game, Profiler* profiler) : 
@@ -36,11 +37,13 @@ std::wstring ProfilerRenderer::log(){
     float average_fps = m_profiler->getProfile().average_fps;
     float delta = m_profiler->getProfile().delta_s;
     float time = m_profiler->getProfile().game_duration_s;
+    std::size_t allocated = m_profiler->getProfile().allocations_bits;
     std::wstring log;
     std::wstring smooth_fps_str = std::to_wstring(smooth_fps);
     std::wstring average_fps_str = std::to_wstring(average_fps);
     std::wstring delta_str = std::to_wstring(delta);
     std::wstring time_str = std::to_wstring(time);
+    std::wstring allocated_str = std::to_wstring(allocated);
     log += L"Smooth FPS: ";
     log += smooth_fps_str;
     log += L"\n";
@@ -52,6 +55,9 @@ std::wstring ProfilerRenderer::log(){
     log += L"\n";
     log += L"Game Duration: ";
     log += time_str;
+    log += L"\n";
+    log += L"Memory Allocations: ";
+    log += allocated_str;
     log += L"\n";
     return log;
 }
